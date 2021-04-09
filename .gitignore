@@ -1,2 +1,9 @@
 .DS_Store
 node_modules
+
+# db connect config
+config.json
+
+# Editor directories and files
+.idea
+.vscode
