@@ -1,0 +1,175 @@
+<% if (session.teacher_id) { %>
+
+<% include ./header %>
+
+<section class="sub_section">
+  <div class="container">
+
+    <div class="page-header sub">
+      <h2>활용가이드</h2>
+      <p>활용 방법에 관한 안내입니다.</p>
+    </div>
+
+    <div class="row align-items-center my-2">
+      <div class="col-lg-3">
+        <h5> ▶ 문항선택 </h5>
+      </div>
+    </div>
+    <div class="row align-items-center my-2">
+
+      <div class="align-items-center col-lg-12">
+        관련 링크 입니다.
+      </div>
+    </div>
+
+    <br>
+
+    <div class="row align-items-center my-2">
+      <div class="col-lg-3">
+        <h5> ▶ 문항생성 </h5>
+      </div>
+    </div>
+    <div class="row align-items-center my-2">
+
+      <div class="align-items-center col-lg-12">
+        관련 링크 입니다.
+      </div>
+    </div>
+
+    <br>
+
+    <div class="row align-items-center my-2">
+      <div class="col-lg-3">
+        <h5> ▶ Bigram Tree </h5>
+      </div>
+    </div>
+    <div class="row align-items-center my-2">
+
+      <div class="align-items-center col-lg-12">
+        관련 링크 입니다.
+      </div>
+    </div>
+
+    <br>
+
+    <div class="row align-items-center my-2">
+      <div class="col-lg-3">
+        <h5> ▶ 주제분석 </h5>
+      </div>
+    </div>
+    <div class="row align-items-center my-2">
+
+      <div class="align-items-center col-lg-12">
+        관련 링크 입니다.
+      </div>
+    </div>
+
+    <br>
+
+    <div class="row align-items-center my-2">
+      <div class="col-lg-3">
+        <h5> ▶ 응답분석 </h5>
+      </div>
+    </div>
+    <div class="row align-items-center my-2">
+
+      <div class="align-items-center col-lg-12">
+        관련 링크 입니다.
+      </div>
+    </div>
+
+
+    <!-- <div class="icon_wrap text-center" style="margin-top: 150px;">
+      <ul>
+        <li>
+          <p class="mb-0 d-inline-block">문항선택</p>
+          <div class="file">
+            <a href="#" download="">
+              <img src="{% static 'mainpage/images/icon_video.png' %}" alt="">
+            </a>
+            <a href="/staticfiles/teacher/images/pdf.pdf" download="">
+              <img src="{% static 'mainpage/images/icon_pdf.png' %}" alt="">
+            </a>
+          </div>
+        </li>
+        <li>
+          <a href="/staticfiles/teacher/images/pdf.pdf" download="">
+            <p class="mb-0 d-inline-block">결과보기</p>
+          </a>
+          <div class="file">
+            <a href="#" download="">
+              <img src="{% static 'mainpage/images/icon_video.png' %}" alt="">
+            </a>
+            <a href="/staticfiles/teacher/images/pdf.pdf" download="">
+              <img src="{% static 'mainpage/images/icon_pdf.png' %}" alt="">
+            </a>
+          </div>
+        </li>
+        <li>
+          <a href="/staticfiles/teacher/images/pdf.pdf" download="">
+            <p class="mb-0 d-inline-block">문항생성</p>
+          </a>
+          <div class="file">
+            <a href="#" download="">
+              <img src="{% static 'mainpage/images/icon_video.png' %}" alt="">
+            </a>
+            <a href="/staticfiles/teacher/images/pdf.pdf" download="">
+              <img src="{% static 'mainpage/images/icon_pdf.png' %}" alt="">
+            </a>
+          </div>
+        </li>
+        <li>
+          <a href="/staticfiles/teacher/images/pdf.pdf" download="">
+            <p class="mb-0 d-inline-block">Bigram Tree</p>
+          </a>
+          <div class="file">
+            <a href="#" download="">
+              <img src="{% static 'mainpage/images/icon_video.png' %}" alt="">
+            </a>
+            <a href="/staticfiles/teacher/images/pdf.pdf" download="">
+              <img src="{% static 'mainpage/images/icon_pdf.png' %}" alt="">
+            </a>
+          </div>
+        </li>
+        <li>
+          <a href="/staticfiles/teacher/images/pdf.pdf" download="">
+            <p class="mb-0 d-inline-block">주제분석</p>
+          </a>
+          <div class="file">
+            <a href="#" download="">
+              <img src="{% static 'mainpage/images/icon_video.png' %}" alt="">
+            </a>
+            <a href="/staticfiles/teacher/images/pdf.pdf" download="">
+              <img src="{% static 'mainpage/images/icon_pdf.png' %}" alt="">
+            </a>
+          </div>
+        </li>
+        <li>
+          <a href="/staticfiles/teacher/images/pdf.pdf" download="">
+            <p class="mb-0 d-inline-block">응답분석</p>
+          </a>
+          <div class="file">
+            <a href="#" download="">
+              <img src="{% static 'mainpage/images/icon_video.png' %}" alt="">
+            </a>
+            <a href="/staticfiles/teacher/images/pdf.pdf" download="">
+              <img src="{% static 'mainpage/images/icon_pdf.png' %}" alt="">
+            </a>
+          </div>
+        </li>
+      </ul>
+    </div> -->
+
+  </div>
+</section>
+
+<% include ./footer %>
+
+<% } else { %>
+
+  <script>
+    alert('로그인을 하셔야 이용이 가능합니다. 먼저 로그인을 해주세요.');
+    document.location.href = "login";
+  </script>
+
+<% } %>
