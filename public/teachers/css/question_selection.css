@@ -1,0 +1,64 @@
+/*.box { margin: 50px auto; width: 500px; }*/
+
+/* custom checkbox */
+.dft-chk {
+    display: inline-block;
+}
+
+.dft-chk + .dft-chk {
+    margin-left: 15px;
+}
+
+.ctm-check {
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: middle;
+    *display: inline;
+    *zoom: 1
+}
+
+.ctm-check input {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    opacity: 0;
+    filter: alpha(opacity=0);
+}
+
+.ctm-check label {
+    display: inline-block;
+    height: 20px;
+    padding-right: 10px;
+    font-size: 12px;
+    line-height: 1.6em;
+    line-height: 19px \9
+}
+
+.ctm-check label i {
+    display: inline-block;
+    float: left;
+    width: 14px;
+    height: 14px;
+    margin: 2px 5px 0 0;
+    background: url('http://cfile23.uf.tistory.com/image/23689442562748E40C3309') no-repeat 0 0;
+}
+
+.ctm-check.checked label i {
+    background-position: 0 -14px
+}
+
+.form-control-borderless {
+    border: none;
+}
+
+.form-control-borderless:hover, .form-control-borderless:active, .form-control-borderless:focus {
+    border: none;
+    outline: none;
+    box-shadow: none;
+}
+
+* {
+    font-size: 16px;
+    font-family: Consolas, sans-serif;
+}

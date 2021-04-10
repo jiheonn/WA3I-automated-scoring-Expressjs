@@ -1,0 +1,140 @@
+
+#input-text {
+    color :rgb(0, 0, 0);
+    margin-top: 5px;
+}
+    
+svg {
+    overflow: hidden;
+}
+
+path { fill: none; stroke: rgb(0, 140, 255); stroke-width: .5px; }
+
+text {
+    cursor: pointer;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+svg:not(.hover) text:hover, .hover tspan:hover {
+    fill: #8299ff;
+    transition-duration: 0.5s;
+}
+
+#header {
+    border-radius: 20px;
+    background: rgb(0, 161, 255);
+    padding: 10px 0 5px;
+    border-bottom: solid #ddd 1px;
+}
+
+#reverse {
+    padding-left: 10px;
+}
+    
+#text {
+    width: 0px;
+    position: absolute;
+    top: 46px;
+    bottom: 0;
+    right: 0;
+    overflow-y: auto;
+    font-family: "Andale Mono", "Courier New", "Courier", monospace;
+}
+
+#text a { text-decoration: none; color: rgb(46, 46, 46); }
+#text a.highlight { background: rgb(255, 255, 255); color: rgb(37, 37, 37); }
+#text a:hover { text-decoration: underline; }
+#text .row { height: 40px; }
+
+rect {
+    fill: none;
+    stroke: #ddd;
+}
+
+rect.page {
+    fill: rgb(204, 204, 204);
+    stroke: #000;
+    fill-opacity: .7;
+    cursor: move;
+}
+
+line {
+    stroke: #000;
+}
+    
+input {
+    vertical-align: middle;
+}
+    
+#form-source {
+    display: inline-block;
+}
+    
+#form {
+    margin:2px;
+    display: none;
+}
+    
+#back a {
+    font-size: 20px;
+    text-decoration: none;
+    color: rgb(255, 255, 255);
+    text-transform: lowercase;
+}
+    
+#back a:hover {
+    color: #2c2c2c;
+    transition-duration: 1s;
+}
+    
+#back {
+    margin: 0;
+    font-size: 2em;
+    line-height: 25px;
+    float: left;
+    margin-right: 1em;
+    padding: 0;
+}
+    
+.wrapper {
+    padding-left: 50px;
+    margin: 0 auto;
+    text-align: justify;
+}
+    
+#source, #keyword {
+    width: 300px;
+    margin-top: 0px;
+    box-sizing: border-box;
+    position: relative;
+    padding: 5px 20px 5px 8px;
+    font-size: 12px;
+    background-color: #fff;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    outline: none;
+}
+    
+#source:focus, #keyword:focus {
+    border-color: rgb(92, 135, 255);
+    transition-duration: 0.5s;
+}
+    
+#form label {
+    cursor: pointer;
+    color: #333;
+}
+    
+#instruction {
+    font-size: 10px;
+    color: #999;
+    font-style: italic;
+    padding: 5px 10px;
+    width: 250px;
+}

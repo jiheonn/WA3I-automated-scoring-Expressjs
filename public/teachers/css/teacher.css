@@ -1,0 +1,515 @@
+#login-menu ul {
+  background-color: #343a40 !important;
+  display: none; /* 평상시에는 서브메뉴가 안보이게 하기 */
+  height: auto;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  position: absolute;
+  width: 100px;
+  z-index: 200;
+}
+
+#login-menu:hover ul {
+  display: block; /* 마우스 커서 올리면 서브메뉴 보이게 하기 */
+}
+
+#login-menu:hover ul li {
+  text-align: center;
+}
+
+textarea {
+  resize: none;
+}
+
+.text-box {
+  float: none;
+  margin: 50px auto;
+  border-style: solid;
+  border-width: 1px;
+  border-color: gray;
+}
+
+.text-box textarea {
+  width: 630px;
+  height: 300px;
+  line-height: 70px;
+}
+
+.btn-center {
+  float: none;
+  margin: 50px auto;
+}
+
+.cooper-img {
+  display: block;
+  margin: 0 auto;
+}
+
+.btn-file {
+  margin-top: 20px;
+}
+
+.topic-opt {
+  float: none;
+  margin: 30px auto;
+}
+
+.sct-margin {
+  margin: 50px;
+}
+
+.login-center {
+  float: none;
+  margin: 0 auto;
+}
+
+.btn3 {
+  width: 100px;
+  background-color: #23bbaa;
+  border: none;
+  color: #fff;
+  padding: 15px 0;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 1.2rem;
+  margin: 4px;
+  cursor: pointer;
+}
+
+.btn3:hover {
+  background-color: #ccc;
+  color: #000;
+}
+
+.sct-center {
+  float: none;
+  margin: 50px auto;
+}
+
+#as_name {
+  width: 635px;
+  height: 50px;
+  border-style: solid;
+  border-width: 1px;
+  margin-top: 20px;
+  border-color: gray;
+  margin-bottom: 25px;
+  text-align: left;
+}
+
+#as_discription {
+  width: 100%;
+  height: 150px;
+  padding: 20px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: grey;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.sct-center input {
+  margin-top: 20px;
+}
+
+#hint-answer-table tr {
+  font-weight: bold;
+  color: white;
+}
+
+#hint-answer-table tr td textarea {
+  width: 100%;
+  padding: 20px;
+  font-weight: normal;
+}
+
+#questionTable {
+  margin-top: 50px;
+}
+
+#questionTable tr {
+  font-weight: bold;
+  color: white;
+}
+
+#questionTable tr td textarea {
+  width: 100%;
+  padding: 20px;
+  font-weight: normal;
+}
+
+.add-del-btn {
+  margin: 50px 0 0 825px;
+}
+
+#add-btn {
+  margin-top: 50px;
+  margin-right: 50px;
+}
+
+#del-btn {
+  margin-top: 50px;
+}
+
+#make-btn {
+  margin-top: 50px;
+}
+
+.qr-button form input {
+  border-style: solid;
+  border-width: 4px;
+  width: 160px;
+  height: 85px;
+  background-color: #2e4a62;
+  color: white;
+  font-weight: bold;
+  margin-right: 15px;
+  margin-bottom: 5px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+#keyword_btn .qr-button {
+  margin-left: 70px;
+}
+
+.qr-code-img {
+  text-align: right;
+  margin-right: 130px;
+}
+
+.qr-btn-font {
+  font-size: 9pt;
+}
+
+.img-margin {
+  margin-top: 50px;
+}
+
+#code_num {
+  width: 346px;
+  height: 50px;
+  border-style: solid;
+  border-width: 1px;
+  margin-top: 10px;
+  border-color: gray;
+  text-align: left;
+  margin-bottom: 10px;
+  padding-left: 10px;
+}
+
+#code_generate {
+  width: 253px;
+  margin-left: 20px;
+}
+
+#as_name {
+  width: 498px;
+  height: 50px;
+  border-style: solid;
+  border-width: 1px;
+  margin-top: 20px;
+  border-color: gray;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.spn-margin {
+  margin-left: 20px;
+}
+
+.sct-input {
+  width: 78px;
+  height: 50px;
+  border-style: solid;
+  border-width: 1px;
+  margin-top: 20px;
+  border-color: gray;
+  text-align: center;
+}
+
+.sct-ipt-top20 {
+  margin-top: 20px;
+}
+
+.sct-ipt-top10 {
+  margin-top: 10px;
+}
+
+#start-date {
+  width: 303px;
+  height: 50px;
+  border-style: solid;
+  border-width: 1px;
+  margin-top: 20px;
+  border-color: gray;
+  text-align: center;
+  padding-right: 15px;
+}
+
+#end-date {
+  width: 303px;
+  height: 50px;
+  border-style: solid;
+  border-width: 1px;
+  margin-top: 20px;
+  border-color: gray;
+  text-align: center;
+  padding-right: 15px;
+}
+
+/*#end-date, #start-date{width: 344px}*/
+
+/*.question-img {
+  width: 200px;
+  height: 200px;
+}*/
+
+.qstlst-margin {
+  margin-top: 50px;
+}
+
+.span-left {
+  margin-left: 20px;
+}
+
+.btn21 {
+  width: 80px;
+  text-align: center;
+  border: solid 2px grey;
+  border-radius: 12px;
+}
+
+#asi_info {
+  text-align: center;
+  width: 100%;
+}
+
+.asi_info_tr {
+  background-color: #343a40;
+  color: white;
+}
+
+.table-center {
+  margin-top: 50px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.table-tr {
+  font-weight: bold;
+  color: white;
+}
+
+.class-box-width {
+  width: 40px;
+}
+
+.pad20 {
+  padding: 20px;
+}
+
+.input-box {
+  border-style: solid;
+  border-width: 1px;
+  border-color: gray;
+  padding-left: 10px;
+}
+
+.input-text {
+  margin-left: 20px;
+  color: gray;
+}
+
+.section-center {
+  float: none;
+  margin: 0 auto;
+}
+
+.topic-count-input {
+  border: 1px solid gray;
+  width: 250px;
+  height: 44px;
+  text-align: center;
+  margin-right: 20px;
+  margin: 50px 10px 50px 50px;
+}
+
+#notice_title {
+  width: 280px;
+  height: 50px;
+  border-style: solid;
+  border-width: 1px;
+  margin-top: 20px;
+  border-color: gray;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+#notice_description {
+  width: 100%;
+  height: 150px;
+  padding: 20px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: grey;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.triangle-border {
+  position: relative;
+  padding: 15px;
+  margin: 1em 0 3em;
+  border: 5px solid #000000;
+  color: #333;
+  background: #fff;
+  /* css3 */
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+}
+
+/* Variant : for left positioned triangle
+------------------------------------------ */
+
+.triangle-border.left {
+  margin-left: 30px;
+}
+
+/* Variant : for right positioned triangle
+------------------------------------------ */
+
+.triangle-border.right {
+  margin-right: 30px;
+}
+
+/* THE TRIANGLE
+------------------------------------------------------------------------------------------------------------------------------- */
+
+.triangle-border:before {
+  content: '';
+  position: absolute;
+  bottom: -20px; /* value = - border-top-width - border-bottom-width */
+  left: 40px; /* controls horizontal position */
+  border-width: 20px 20px 0;
+  border-style: solid;
+  border-color: #000000 transparent;
+  /* reduce the damage in FF3.0 */
+  display: block;
+  width: 0;
+}
+
+/* creates the smaller  triangle */
+.triangle-border:after {
+  content: '';
+  position: absolute;
+  bottom: -13px; /* value = - border-top-width - border-bottom-width */
+  left: 47px; /* value = (:before left) + (:before border-left) - (:after border-left) */
+  border-width: 13px 13px 0;
+  border-style: solid;
+  border-color: #fff transparent;
+  /* reduce the damage in FF3.0 */
+  display: block;
+  width: 0;
+}
+
+/* Variant : top
+------------------------------------------ */
+
+/* creates the larger triangle */
+.triangle-border.top:before {
+  top: -20px; /* value = - border-top-width - border-bottom-width */
+  bottom: auto;
+  left: auto;
+  right: 40px; /* controls horizontal position */
+  border-width: 0 20px 20px;
+}
+
+/* creates the smaller  triangle */
+.triangle-border.top:after {
+  top: -13px; /* value = - border-top-width - border-bottom-width */
+  bottom: auto;
+  left: auto;
+  right: 47px; /* value = (:before right) + (:before border-right) - (:after border-right) */
+  border-width: 0 13px 13px;
+}
+
+/* Variant : left
+------------------------------------------ */
+
+/* creates the larger triangle */
+.triangle-border.left:before {
+  top: 10px; /* controls vertical position */
+  bottom: auto;
+  left: -30px; /* value = - border-left-width - border-right-width */
+  border-width: 15px 30px 15px 0;
+  border-color: transparent #000000;
+}
+
+/* creates the smaller  triangle */
+.triangle-border.left:after {
+  top: 16px; /* value = (:before top) + (:before border-top) - (:after border-top) */
+  bottom: auto;
+  left: -21px; /* value = - border-left-width - border-right-width */
+  border-width: 9px 21px 9px 0;
+  border-color: transparent #fff;
+}
+
+/* Variant : right
+------------------------------------------ */
+
+/* creates the larger triangle */
+.triangle-border.right:before {
+  top: 10px; /* controls vertical position */
+  bottom: auto;
+  left: auto;
+  right: -30px; /* value = - border-left-width - border-right-width */
+  border-width: 15px 0 15px 30px;
+  border-color: transparent #000000;
+}
+
+/* creates the smaller  triangle */
+.triangle-border.right:after {
+  top: 16px; /* value = (:before top) + (:before border-top) - (:after border-top) */
+  bottom: auto;
+  left: auto;
+  right: -21px; /* value = - border-left-width - border-right-width */
+  border-width: 9px 0 9px 21px;
+  border-color: transparent #fff;
+}
+
+/*   201007~  추가      */
+.wc_box {
+  border: 1px solid #ced4da;
+  width: 1400px;
+  padding: 65px 60px 65px 300px;
+  background: #e9f1f3;
+}
+#question_list .card-body {
+  height: 190px;
+  overflow: hidden;
+  padding: 0;
+}
+#topic_count {
+  padding-right: 10px;
+}
+
+/*   201127~  추가      */
+.question_wc_box {
+  border: 1px solid #ced4da;
+  width: 1400px;
+  padding: 65px 60px 65px 60px;
+  background: #e9f1f3;
+}
+#question_list .card-body {
+  height: 190px;
+  overflow: hidden;
+  padding: 0;
+}
+#topic_count {
+  padding-right: 10px;
+}
