@@ -1,0 +1,100 @@
+
+
+    <!DOCTYPE html>
+    <html lang="ko">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>WA3I</title>
+
+        <link rel="stylesheet" href="mainpage/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" href="mainpage/css/w3.css">
+        <link rel="stylesheet" href="mainpage/css/swiper.min.css">
+        <link rel="stylesheet" href="mainpage/css/bootstrap.min.css">
+        <link rel="stylesheet" href="mainpage/css/font.css">
+        <link rel="stylesheet" href="mainpage/css/style.css">
+        <link rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap">
+
+        <!-- {% block teacher_css %} -->
+        <link rel="stylesheet" href="css/teacher.css">
+        <link rel="stylesheet" href="css/main.css">
+        <!-- {% endblock %} -->
+
+        <script src="mainpage/js/jquery-3.5.1.min.js"></script>
+        <script src="mainpage/js/bootstrap.min.js"></script>
+        <script src="mainpage/js/swiper.min.js"></script>
+        <script src="mainpage/js/main.js"></script>
+
+        <!-- datatable source -->
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css"
+            type="text/css" />
+        <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+
+        <script>
+            $(document).ready(function () {
+                $('#view_result').click(function () {
+                    document.getElementById("view_result_form").submit();
+                });
+            });
+        </script>
+    </head>
+
+    <body>
+        <!-- {% block head_class %} -->
+        <div class="wrap">
+            <!-- {% endblock %} -->
+            <form id="view_result_form" action="teacher_view_result" method="POST">
+                <!-- {% csrf_token %}
+            <input id="teacher_id" name="teacher_id" type="hidden" value="{{ user.teacher_id }}"> -->
+                <header class="header">
+                    <nav class="navbar navbar-expand-lg p-0">
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <a class="navbar-brand" href="/">
+                                <img src="mainpage/images/logo.png" alt="">
+                            </a>
+                            <ul class="navbar-nav mr-auto">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="home">홈</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="teacher_question_selection">문항선택</a>
+                                </li>
+                                <li id="view_result" class="nav-item">
+                                    <a class="nav-link" href="#">결과보기</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="teacher_make_question">문항생성</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="teacher_bigram_tree">Bigram Tree</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="teacher_topic_analysis">주제분석</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="teacher_response_analysis">응답분석</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="teacher_qr_code">QR코드</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="notice">공지사항</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="handbook">활용가이드</a>
+                                </li>
+                            </ul>
+                            <ul class="nav nav-pills">
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+                                        aria-haspopup="true" aria-expanded="false"><%= session.teacher_name %></a>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="/teachers/logout">로그아웃</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+                </header>
+            </form>
