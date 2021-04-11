@@ -32,12 +32,37 @@ router.get('/QR-code', (req, res) => {
 
   db.query('SELECT * FROM category;', (err, row) => {
     if (err) throw err;
-    db.query('SELECT * FROM question WHERE upload_check = true;', (err, results) => {
+    
+    const page_num = Number(req.query.page) || 1;
+    const content_size = 16;
+    const page_size = 10;
+    const skip_size = (page_num - 1) * content_size;
+    db.query('SELECT count(*) AS "count" FROM question;', (err, count_result) => {
       if (err) throw err;
-      res.render('teachers/QR_code', {
-        session: session,
-        category_data: row,
-        question_list: results
+
+      const total_count = Number(count_result[0].count);
+      const page_total = Math.ceil(total_count / content_size);
+      const page_start = ((Math.ceil(page_num / page_size) - 1) * page_size) + 1;
+      let page_end = (page_start + page_size) - 1;
+      db.query('SELECT * FROM question WHERE upload_check = true LIMIT ?, ?',
+      [skip_size, content_size], (err, results) => {
+        if (err) throw err;
+
+        if (page_end > page_total) page_end = page_total;
+        const result = {
+          page_num,
+          page_start,
+          page_end,
+          page_total,
+          contents: results
+        }
+        res.render('teachers/QR_code', {
+          session: session,
+          category_data: row,
+          category_option: null,
+          user_input: null,
+          question_list: result
+        });
       });
     });
   });
@@ -49,35 +74,75 @@ router.get('/QR-code-search', (req, res) => {
   const option = req.query.option;
   const user_input = req.query.user_input;
   
-  let sql;
+  let count_sql, sql;
   if ((option != 'select') && (user_input != '')) {
-    sql = `SELECT * FROM question AS q \
+    count_sql = `SELECT count(DISTINCT q.question_name) AS "count" FROM question AS q \
+                  JOIN category AS c ON q.category_id = c.category_id \
+                  JOIN keyword AS k ON q.question_id = k.question_id \
+                  WHERE c.category_name = "${option}" \
+                  AND q.upload_check = true \
+                  AND (q.question_name LIKE "%${user_input}%" OR k.keyword_name LIKE "%${user_input}%")`;
+    sql = `SELECT DISTINCT q.question_name, q.question_id, q.image FROM question AS q \
             JOIN category AS c ON q.category_id = c.category_id \
             JOIN keyword AS k ON q.question_id = k.question_id \
             WHERE c.category_name = "${option}" \
             AND q.upload_check = true \
-            AND (q.question_name LIKE "%${user_input}% OR k.keyword_name LIKE "%${user_input}%");"`;
+            AND (q.question_name LIKE "%${user_input}%" OR k.keyword_name LIKE "%${user_input}%")`;
   } else if (option != 'select') {
+    count_sql = `SELECT count(*) AS "count" FROM question AS q \
+                  JOIN category AS c ON q.category_id = c.category_id \
+                  WHERE c.category_name = "${option}" \
+                  AND q.upload_check = true`;
     sql = `SELECT * FROM question AS q \
             JOIN category AS c ON q.category_id = c.category_id \
             WHERE c.category_name = "${option}" \
-            AND q.upload_check = true;`;
+            AND q.upload_check = true`;
   } else if (user_input != '') {
-    sql = `SELECT DISTINCT q.question_id, q.question_name, q.image FROM question AS q\
+    count_sql = `SELECT count(DISTINCT q.question_name) AS "count" FROM question AS q \
+                  JOIN keyword AS k ON q.question_id = k.question_id \
+                  WHERE (q.question_name LIKE "%${user_input}%" OR k.keyword_name LIKE "%${user_input}%") \
+                  AND q.upload_check = true`;
+    sql = `SELECT DISTINCT q.question_name, q.question_id, q.image FROM question AS q \
             JOIN keyword AS k ON q.question_id = k.question_id \
             WHERE (q.question_name LIKE "%${user_input}%" OR k.keyword_name LIKE "%${user_input}%") \
-            AND q.upload_check = true;`;
+            AND q.upload_check = true`;
   } else {
-    sql = 'SELECT * FROM question WHERE upload_check = true;';
+    count_sql = 'SELECT count(*) AS "count" FROM question WHERE upload_check = true';
+    sql = 'SELECT * FROM question WHERE upload_check = true';
   }
   db.query('SELECT * FROM category;', (err, row) => {
     if (err) throw err;
-    db.query(sql, (err, results) => {
+    
+    const page_num = Number(req.query.page) || 1;
+    const content_size = 16;
+    const page_size = 10;
+    const skip_size = (page_num - 1) * content_size;
+    db.query(count_sql, (err, count_result) => {
       if (err) throw err;
-      res.render('teachers/QR_code', {
-        session: session,
-        category_data: row,
-        question_list: results
+
+      const total_count = Number(count_result[0].count);
+      const page_total = Math.ceil(total_count / content_size);
+      const page_start = ((Math.ceil(page_num / page_size) - 1) * page_size) + 1;
+      let page_end = (page_start + page_size) - 1;
+      db.query(sql + ' LIMIT ?, ?',
+      [skip_size, content_size], (err, results) => {
+        if (err) throw err;
+
+        if (page_end > page_total) page_end = page_total;
+        const result = {
+          page_num,
+          page_start,
+          page_end,
+          page_total,
+          contents: results
+        }
+        res.render('teachers/QR_code', {
+          session: session,
+          category_data: row,
+          category_option: option,
+          user_input: user_input,
+          question_list: result
+        });
       });
     });
   });

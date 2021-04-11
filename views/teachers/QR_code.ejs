@@ -63,26 +63,11 @@
             </div>
         </form>
 
-        <!-- <div id="qr_div" class="row no-gutters align-items-center"
-            style="margin-bottom: 25px; margin-left: 1079px; margin-top: -30px;">
-
-            <div>
-                <input id="QRsearch_user_input" class="form-control form-control-lg form-control-borderless"
-                    placeholder="키워드를 입력해 주세요." onkeyup="enterkey();">
-            </div>
-
-            <div class="col-auto">
-                <button type="button" id="QR_search" class="w3-button w3-large w3-round w3-blue">
-                    검색
-                </button>
-            </div>
-        </div> -->
-
         <form id="qr_form">
             <div id="whole_card" class="row">
                 <!-- <div id="question_list" class="row"> -->
 
-                <% for (var data of question_list) { %>
+                <% for (var data of question_list.contents) { %>
                     <div class="col-md-3 mb-5">
                         <div class="card h-100" align="center">
                             <div class="card-body p-0">
@@ -101,56 +86,74 @@
             </div>
         </form>
 
-        <!-- <div class="row d-flex justify-content-center" id="keyword_btn">
-            <div class="col-md-10 qr-button ">
-                <form id="qr_form">
-                    {% for data in question_list %}
-                    <input id="{{ data.question_id }}" class="qr-btn-font" type="button"
-                        value="{{ data.question_name }}">
-                    {% endfor %}
-                </form>
-            </div>
-        </div> -->
-
         <div class="row" style="margin-top: 50px; margin-left: 500px; margin-bottom: 50px;">
             <div class="col">
                 <ul class="pagination">
-                    {% if question_list.has_previous %}
-                    <li class="page-item">
-                        <a href="?page={{1}}&option={{ category_option }}&user_input={{ user_input }}"
-                            class="page-link">&laquo;</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link"
-                            href="?page={{ question_list.previous_page_number }}&option={{ category_option }}&user_input={{ user_input }}"
-                            tabindex="-1">&lt;
-                        </a>
-                    </li>
-                    {% endif %}
-                    {% for page in paginator_range %}
-                    {% if question_list.number == page %}
-                    <li class="page-item active">
-                        <span class="page-link">{{ question_list.number }}
-                            <span class="sr-only">(current)</span>
-                        </span>
-                    </li>
-                    {% else %}
-                    <li class="page-item">
-                        <a class="page-link"
-                            href="?page={{page}}&option={{ category_option }}&user_input={{ user_input }}">{{ page }}</a>
-                    </li>
-                    {% endif %}
-                    {% endfor %}
-                    {% if question_list.has_next %}
-                    <li class="page-item">
-                        <a class="page-link"
-                            href="?page={{ question_list.next_page_number }}&option={{ category_option }}&user_input={{ user_input }}">&gt;</a>
-                    </li>
-                    <li class="page-item">
-                        <a href="?page={{ question_list.paginator.num_pages }}&option={{ category_option }}&user_input={{ user_input }}"
-                            class="page-link">&raquo;</a>
-                    </li>
-                    {% endif %}
+                    <% if (question_list.page_num > 1) { %>
+                        <% if (category_option || user_input) { %>
+                            <li class="page-item">
+                                <a href="?page=1&option=<%= category_option %>&user_input=<%= user_input %>" class="page-link">&laquo;</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link"
+                                    href="?page=<%= question_list.page_num - 1 %>&option=<%= category_option %>&user_input=<%= user_input %>"
+                                    tabindex="-1">&lt;
+                                </a>
+                            </li>
+                        <% } else { %>
+                            <li class="page-item">
+                                <a href="?page=1" class="page-link">&laquo;</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link"
+                                    href="?page=<%= question_list.page_num - 1 %>"
+                                    tabindex="-1">&lt;
+                                </a>
+                            </li>
+                        <% } %>
+                    <% } %>
+                    <% for (var i = question_list.page_start; i <= question_list.page_end; i++) { %>
+                        <% if (i == question_list.page_num) { %>
+                            <li class="page-item active">
+                                <span class="page-link"><%= question_list.page_num %>
+                                    <span class="sr-only">(current)</span>
+                                </span>
+                            </li>
+                        <% } else { %>
+                            <% if (category_option || user_input) { %>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page=<%= i %>&option=<%= category_option %>&user_input=<%= user_input %>"><%= i %></a>
+                                </li>
+                            <% } else { %>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page=<%= i %>">
+                                        <%= i %>
+                                    </a>
+                                </li>
+                            <% } %>
+                        <% } %>
+                    <% } %>
+                    <% if (question_list.page_num < question_list.page_total) { %>
+                        <% if (category_option || user_input) { %>
+                            <li class="page-item">
+                                <a class="page-link"
+                                    href="?page=<%= question_list.page_num + 1 %>&option=<%= category_option %>&user_input=<%= user_input %>">&gt;</a>
+                            </li>
+                            <li class="page-item">
+                                <a href="?page=<%= question_list.page_total %>&option=<%= category_option %>&user_input=<%= user_input %>"
+                                    class="page-link">&raquo;</a>
+                            </li>
+                        <% } else { %>
+                            <li class="page-item">
+                                <a class="page-link"
+                                    href="?page=<%= question_list.page_num + 1 %>">&gt;</a>
+                            </li>
+                            <li class="page-item">
+                                <a href="?page=<%= question_list.page_total %>"
+                                    class="page-link">&raquo;</a>
+                            </li>
+                        <% } %>
+                    <% } %>
                 </ul>
             </div>
         </div>
