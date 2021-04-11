@@ -3,7 +3,7 @@
 <% include ./header %>
 
 <style>
-	.noticeViewDetail:hover {
+	.noticeViewDetail:hover span{
 		color: blue;
 	}
 </style>
@@ -44,7 +44,7 @@
 
 							<td style="text-align: left;">
 								<a class="w3-round w3-dark noticeViewDetail" href="/teachers/notice/<%= notice_value.notice_id %>">
-									<%= notice_value.notice_name %>
+									<span><%= notice_value.notice_name %></span>
 								</a>
 							</td>
 							<td><%= notice_value.made_date %></td>
