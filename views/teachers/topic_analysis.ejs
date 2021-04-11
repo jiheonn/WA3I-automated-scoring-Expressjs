@@ -1,0 +1,56 @@
+<% if (session.teacher_id) { %>
+
+<% include ./header %>
+
+<link href="css/topic_analysis.css" rel="stylesheet">
+
+<script src="https://d3js.org/d3.v4.js"></script>
+
+<section class="sub_section">
+    <div class="container p-0">
+        <div id="input-page">
+            <div class="page-header sub">
+                <h2>주제분석</h2>
+                <p>응답 파일을 업로드 하고 주제 개수를 입력한 뒤, 실행 버튼을 누르면 분석이 진행됩니다.</p>
+            </div>
+            <div class="col-12 section-center mt-5">
+                <div>
+                    <label for="responded_student_file">
+                        학생 응답 파일(.csv, .xlsx)을 업로드 해주세요.<br>
+                        <strong style="color:red">엑셀의 첫 번째 시트의 첫 번째 열만 분석</strong>됩니다.<br>
+                        분석하는데 시간이 몇 분 소요될 수 있습니다.</label>
+                    <div class="file_wrap">
+                        <input id="topic-modeling-file" type="file" accept=".csv, .xlsx" name="responded_student_file">
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <label for="topic_count" class="d-inline">토픽 주제 개수를 입력해 주세요. (2 ~ 10) 사이의 정수</label>
+                    <input id="topic_count" class="topic-count-input" type="number" name="topic-count"
+                        placeholder="토픽 주제 개수 입력 (2~10)"
+                        style="height: 50px; padding-left: 10px; margin-left: 20px; border: 1px solid #ddd;">
+                    <button id="topic-modeling-submit-btn" type="submit" class="w3-button w3-large w3-round w3-blue"
+                        style="margin-top: 50px;">실행</button>
+                    <label class="mt-3"><input type="checkbox" name="version"> 문장 중심으로 그래프
+                        보기</label>
+                </div>
+            </div>
+        </div>
+        <div id="topic-modeling">
+            <div id="vis-tmtable"></div>
+            <div id="vis-tsne"></div>
+        </div>
+    </div>
+</section>
+
+<script src="js/topic_analysis.js"></script>
+
+<% include ./footer %>
+
+<% } else { %>
+
+<script>
+    alert('로그인을 하셔야 이용이 가능합니다. 먼저 로그인을 해주세요.');
+    document.location.href = "login";
+</script>
+
+<% } %>

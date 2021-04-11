@@ -1,0 +1,87 @@
+<% if (session.teacher_id) { %>
+
+<% include ./header %>
+
+<section class="sub_section">
+    <div class="container p-0">
+        <div id="front-page">
+            <div class="page-header sub" style="margin-bottom: 50px;">
+                <h2>응답분석</h2>
+                <p>
+                    Excel에 입력된 학생들의 응답을 빠르게 분석하는 도구입니다.<br>
+                    자세한 사용 방법은 활용가이드에서 확인해주세요.
+                </p>
+            </div>
+        </div>
+        <div id="back-page" style="padding:0; display:block;">
+
+            <div class="navbar navbar-inverse"
+                style="margin-bottom: 10px; border-bottom: 1px solid rgba(0, 0, 0, 0.08); box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1); background-color: #FFF">
+                <div class="container-fluid">
+                    <div class="row" style="width:100%;">
+                        <div class="navbar-header col-sm-2">
+                            <a class="navbar-brand" href="response-analysis"><b
+                                    style="color: #000; height: 50px; line-height: 40px;">응답 분석하기</b></a>
+                        </div>
+                        <div class="col-sm-3" id="temp">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" accept=".xlsx" id="validatedCustomFile"
+                                    required="">
+                                <label class="custom-file-label" for="validatedCustomFile">파일을 선택하세요...</label>
+                                <div class="invalid-feedback">browse local file...</div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <button id="submitbutton" type="button" class="btn btn-outline-secondary">엑셀 파일
+                                불러오기</button>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                <input type="text" id="addKeyWords-input" class="form-control"
+                                    placeholder="키워드 추가(스페이스바로 구분)" aria-label="Add Words"
+                                    aria-describedby="button-addon2">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" type="button" id="addKeyWords-button"
+                                        onclick="addKeyWords()">추가</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-1">
+                            <input type="button" class="btn btn-outline-secondary" id="dwn-btn" value="다운로드">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <br>
+                        <p>키워드를 추가하여 여러 응답들 내에 존재하는 단어들의 빈도수를 손쉽게 분석할 수 있습니다. </p>
+                        <p>여러 키워드를 스페이스바로 구분하여 동시에 입력할 수도 있습니다.</p>
+                        <p>분석 결과는 다운로드하여 보관 가능합니다.</p>
+                    </div>
+                    <div class="col-sm-12 bottom-panel">
+                        <div id="sentences" class="row">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.15.5/xlsx.full.min.js"></script>
+<script src="js/jscolor.js"></script>
+<script src="js/response_analysis.js"></script>
+
+<% include ./footer %>
+
+<% } else { %>
+
+<script>
+    alert('로그인을 하셔야 이용이 가능합니다. 먼저 로그인을 해주세요.');
+    document.location.href = "login";
+</script>
+
+<% } %>
