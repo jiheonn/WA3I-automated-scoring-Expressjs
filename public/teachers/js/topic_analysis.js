@@ -1,4 +1,4 @@
-var api_server = 'http://' + document.domain + ':' + 5252;
+var api_server = 'http://' + wai.best + ':' + 5252;
 var version = 'keywords';
 
 function getTopicAnalysis() {

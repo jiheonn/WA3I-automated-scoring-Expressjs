@@ -461,7 +461,7 @@ div.append("a").attr("href", function(e) {
   return e.name
 }), d3.select("#examples").append("div").attr("class", "clear");
 
-var api_server = 'http://' + document.domain + ':' + 5252,
+var api_server = 'http://' + wai.best + ':' + 5252,
   re = new RegExp("[" + unicodePunctuationRe + "]|\\d+|[^\\d" + unicodePunctuationRe + "0000-001F007F-009F002000A01680180E2000-200A20282029202F205F3000".replace(/\w{4}/g, "\\u$&") + "]+", "g"),
   vis = d3.select("#vis"),
   svg = vis.append("svg"),
