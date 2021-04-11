@@ -27,6 +27,202 @@ router.get('/home', (req, res) => {
   res.render('teachers/home', {session: session});
 });
 
+router.get('/question-selection', (req, res) => {
+  const session = req.session;
+
+  db.query('SELECT * FROM category;', (err, row) => {
+    if (err) throw err;
+    
+    const page_num = Number(req.query.page) || 1;
+    const content_size = 8;
+    const page_size = 10;
+    const skip_size = (page_num - 1) * content_size;
+    db.query('SELECT count(*) AS "count" FROM question;', (err, count_result) => {
+      if (err) throw err;
+
+      const total_count = Number(count_result[0].count);
+      const page_total = Math.ceil(total_count / content_size);
+      const page_start = ((Math.ceil(page_num / page_size) - 1) * page_size) + 1;
+      let page_end = (page_start + page_size) - 1;
+      db.query('SELECT * FROM question WHERE upload_check = true LIMIT ?, ?',
+      [skip_size, content_size], (err, results) => {
+        if (err) throw err;
+
+        if (page_end > page_total) page_end = page_total;
+        const result = {
+          page_num,
+          page_start,
+          page_end,
+          page_total,
+          contents: results
+        }
+        res.render('teachers/question_selection', {
+          session: session,
+          category_data: row,
+          category_option: null,
+          user_input: null,
+          question_list: result
+        });
+      });
+    });
+  });
+});
+
+router.get('/question-selection-search', (req, res) => {
+  const session = req.session;
+  
+  const option = req.query.option;
+  const user_input = req.query.user_input;
+
+  let count_sql, sql;
+  if ((option != 'select') && (user_input != '')) {
+    count_sql = `SELECT count(DISTINCT q.question_name) AS "count" FROM question AS q \
+                  JOIN category AS c ON q.category_id = c.category_id \
+                  JOIN keyword AS k ON q.question_id = k.question_id \
+                  WHERE c.category_name = "${option}" \
+                  AND q.upload_check = true \
+                  AND (q.question_name LIKE "%${user_input}%" OR k.keyword_name LIKE "%${user_input}%")`;
+    sql = `SELECT DISTINCT q.question_name, q.question_id, q.image FROM question AS q \
+            JOIN category AS c ON q.category_id = c.category_id \
+            JOIN keyword AS k ON q.question_id = k.question_id \
+            WHERE c.category_name = "${option}" \
+            AND q.upload_check = true \
+            AND (q.question_name LIKE "%${user_input}%" OR k.keyword_name LIKE "%${user_input}%")`;
+  } else if (option != 'select') {
+    count_sql = `SELECT count(*) AS "count" FROM question AS q \
+                  JOIN category AS c ON q.category_id = c.category_id \
+                  WHERE c.category_name = "${option}" \
+                  AND q.upload_check = true`;
+    sql = `SELECT * FROM question AS q \
+            JOIN category AS c ON q.category_id = c.category_id \
+            WHERE c.category_name = "${option}" \
+            AND q.upload_check = true`;
+  } else if (user_input != '') {
+    count_sql = `SELECT count(DISTINCT q.question_name) AS "count" FROM question AS q \
+                  JOIN keyword AS k ON q.question_id = k.question_id \
+                  WHERE (q.question_name LIKE "%${user_input}%" OR k.keyword_name LIKE "%${user_input}%") \
+                  AND q.upload_check = true`;
+    sql = `SELECT DISTINCT q.question_name, q.question_id, q.image FROM question AS q \
+            JOIN keyword AS k ON q.question_id = k.question_id \
+            WHERE (q.question_name LIKE "%${user_input}%" OR k.keyword_name LIKE "%${user_input}%") \
+            AND q.upload_check = true`;
+  } else {
+    count_sql = 'SELECT count(*) AS "count" FROM question WHERE upload_check = true';
+    sql = 'SELECT * FROM question WHERE upload_check = true';
+  }
+  db.query('SELECT * FROM category;', (err, row) => {
+    if (err) throw err;
+    
+    const page_num = Number(req.query.page) || 1;
+    const content_size = 8;
+    const page_size = 10;
+    const skip_size = (page_num - 1) * content_size;
+    db.query(count_sql, (err, count_result) => {
+      if (err) throw err;
+
+      const total_count = Number(count_result[0].count);
+      const page_total = Math.ceil(total_count / content_size);
+      const page_start = ((Math.ceil(page_num / page_size) - 1) * page_size) + 1;
+      let page_end = (page_start + page_size) - 1;
+      db.query(sql + ' LIMIT ?, ?',
+      [skip_size, content_size], (err, results) => {
+        if (err) throw err;
+
+        if (page_end > page_total) page_end = page_total;
+        const result = {
+          page_num,
+          page_start,
+          page_end,
+          page_total,
+          contents: results
+        }
+        res.render('teachers/question_selection', {
+          session: session,
+          category_data: row,
+          category_option: option,
+          user_input: user_input,
+          question_list: result
+        });
+      });
+    });
+  });
+});
+
+router.get('/view-result', (req, res) => {
+  const session = req.session;
+  const teacher_id = session.teacher_id;
+  
+  db.query(`SELECT * FROM assignment WHERE teacher_id = ${teacher_id}`, (err, results) => {
+    if (err) throw err;
+    
+    for (let assignment_value of results) {
+      assignment_value.start_date = moment(assignment_value.start_date).format('YYYY-MM-DD');
+      assignment_value.end_date = moment(assignment_value.end_date).format('YYYY-MM-DD');
+    }
+    res.render('teachers/view_result', {session: session, assignment_data: results});
+  });
+});
+
+router.get('/view-result/:id', (req, res) => {
+  const session = req.session;
+  const assignment_id = req.params.id;
+  
+  db.query(`SELECT * FROM assignment WHERE assignment_id = "${assignment_id}";`, (err, result) => {
+    if (err) throw err;
+
+    res.render('teachers/view_result_detail', {
+      session: session,
+      assignment_type: result[0].type,
+    });
+  });
+});
+
+router.get('/make-question', (req, res) => {
+  const session = req.session;
+    
+  res.render('teachers/make_question', {session: session});
+});
+
+router.post('/make-question', (req, res) => {
+  console.log(req.body);
+
+  let new_question = {
+    question_name: req.body.question_name,
+    description: req.body.description,
+    image: req.body.image.split('.'),
+    hint: req.body.hint,
+    answer: req.body.answer,
+    mark_text: req.body.mark_text
+  }
+  if (new_question.question_name && new_question.description && new_question.image &&
+      new_question.hint && new_question.answer && new_question.mark_text) {
+    db.query('SELECT * FROM make_question ORDER BY make_question_id DESC LIMIT 1', (err, result) => {
+      if (err) throw err;
+          
+      const make_question_id = result[0].make_question_id + 1;
+      const teacher_id = req.session.teacher_id;
+      new_question.image = `makequestion/image/make_question_${make_question_id}.${new_question.image[1]}`;
+      const made_date = moment().format('YYYY-MM-DD');
+      const sql = 'INSERT INTO make_question (teacher_id, question_name, description, answer, \
+                  image, hint, made_date, upload_check) VALUES (?, ?, ?, ?, ?, ?, ?, 0);';
+      const params = [teacher_id, new_question.question_name, new_question.description, new_question.answer,
+                      new_question.image, new_question.hint, made_date];
+      db.query(sql, params, (err, row) => {
+        if (err) throw err;
+
+        for (var mark_text of new_question.mark_text) {
+          db.query(`INSERT INTO mark (make_question_id, mark_text) VALUES (${make_question_id}, "${mark_text}")`, (err, results) => {
+            if (err) throw err;
+          });
+        }
+        res.send('<script type="text/javascript">alert("문항생성이 완료되었습니다."); window.location = "make-question";</script>');
+      });
+    });
+  } else {
+    res.send('<script type="text/javascript">alert("입력하신 내용 중 빈칸이 존재합니다."); window.location = "make-question";</script>');
+  }
+});
+
 router.get('/bigram-tree', (req, res) => {
   const session = req.session;
 
