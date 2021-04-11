@@ -1,0 +1,233 @@
+<% if (session.teacher_id) { %>
+
+<% include ./header %>
+
+<section class="sub_section">
+    <div class="container">
+        <div class="page-header sub">
+            <h2>QR코드</h2>
+            <p>문항을 선택하면 QR코드와 링크가 생성됩니다.<br>
+            </p>
+        </div>
+
+        <div class="justify-content-center my-5" id="keyword_btn">
+            <div class="input-group mb-3 justify-content-center">
+                <div class="input-group-prepend">
+
+                    <span class="input-group-text" id="basic-addon3">
+                        문항 링크
+                    </span>
+                </div>
+
+                <input style="height: 50px;" type="text" value="이곳에 문항 링크가 생성됩니다." class="form-control wc_form"
+                    id="qr_code_url" aria-describedby="basic-addon3">
+                <input id="linkCopy-QRcode" style="margin-left: 20px;" type="button"
+                    class="w3-button w3-large w3-round w3-blue" value="링크 복사">
+                <input id="downlad-QRcodeImage" style="margin-left: 20px;" type="button"
+                    class="w3-button w3-large w3-round w3-blue" value="이미지 저장">
+            </div>
+            <div class="col-7 sct-center" id="qrcode"
+                style="width:100px; height:100px; margin-top:30px; margin-left: 625px;"></div>
+        </div>
+
+        <form action="QR-code-search" method="GET">
+            <div class="col-12 d-flex p-0" style="margin-top: -80px">
+                <div id="category" class="sct-margin ml-auto mr-0">
+                    <select id="category_option" name="option">
+                        <option value="select" selected="selected">카테고리</option>
+
+                        <% for (var data of category_data) { %>
+                            <option value="<%= data.category_name %>"><%= data.category_name %></option>
+                        <% } %>
+
+                    </select>
+                </div>
+
+                <div class="row no-gutters align-items-center">
+                    <div class="col-auto">
+                        <i class="fas fa-search h4 text-body"></i>
+                    </div>
+
+                    <div>
+                        <input id="user_input" name="user_input"
+                            class="form-control form-control-lg form-control-borderless" placeholder="키워드를 입력해 주세요.">
+                    </div>
+
+                    <div class="col-auto">
+                        <button type="submit" id="search" class="w3-button w3-large w3-round w3-blue">
+                            검색
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </form>
+
+        <!-- <div id="qr_div" class="row no-gutters align-items-center"
+            style="margin-bottom: 25px; margin-left: 1079px; margin-top: -30px;">
+
+            <div>
+                <input id="QRsearch_user_input" class="form-control form-control-lg form-control-borderless"
+                    placeholder="키워드를 입력해 주세요." onkeyup="enterkey();">
+            </div>
+
+            <div class="col-auto">
+                <button type="button" id="QR_search" class="w3-button w3-large w3-round w3-blue">
+                    검색
+                </button>
+            </div>
+        </div> -->
+
+        <form id="qr_form">
+            <div id="whole_card" class="row">
+                <!-- <div id="question_list" class="row"> -->
+
+                <% for (var data of question_list) { %>
+                    <div class="col-md-3 mb-5">
+                        <div class="card h-100" align="center">
+                            <div class="card-body p-0">
+                                <img class="img-fluid rounded mb-4 mb-lg-0" src="/static/<%= data.image %>"
+                                    style="width:200px; height:200px;">
+                            </div>
+                            <span class="card-footer">
+                                <input id="<%= data.question_id %>" type="button" class="w3-btn w3-round w3-dark"
+                                    name="question_id" value="<%= data.question_name %>">
+                            </span>
+                        </div>
+                    </div>
+                <% } %>
+
+                <!-- </div> -->
+            </div>
+        </form>
+
+        <!-- <div class="row d-flex justify-content-center" id="keyword_btn">
+            <div class="col-md-10 qr-button ">
+                <form id="qr_form">
+                    {% for data in question_list %}
+                    <input id="{{ data.question_id }}" class="qr-btn-font" type="button"
+                        value="{{ data.question_name }}">
+                    {% endfor %}
+                </form>
+            </div>
+        </div> -->
+
+        <div class="row" style="margin-top: 50px; margin-left: 500px; margin-bottom: 50px;">
+            <div class="col">
+                <ul class="pagination">
+                    {% if question_list.has_previous %}
+                    <li class="page-item">
+                        <a href="?page={{1}}&option={{ category_option }}&user_input={{ user_input }}"
+                            class="page-link">&laquo;</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link"
+                            href="?page={{ question_list.previous_page_number }}&option={{ category_option }}&user_input={{ user_input }}"
+                            tabindex="-1">&lt;
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% for page in paginator_range %}
+                    {% if question_list.number == page %}
+                    <li class="page-item active">
+                        <span class="page-link">{{ question_list.number }}
+                            <span class="sr-only">(current)</span>
+                        </span>
+                    </li>
+                    {% else %}
+                    <li class="page-item">
+                        <a class="page-link"
+                            href="?page={{page}}&option={{ category_option }}&user_input={{ user_input }}">{{ page }}</a>
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+                    {% if question_list.has_next %}
+                    <li class="page-item">
+                        <a class="page-link"
+                            href="?page={{ question_list.next_page_number }}&option={{ category_option }}&user_input={{ user_input }}">&gt;</a>
+                    </li>
+                    <li class="page-item">
+                        <a href="?page={{ question_list.paginator.num_pages }}&option={{ category_option }}&user_input={{ user_input }}"
+                            class="page-link">&raquo;</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- <div class="board_bottom_wrap">
+            <span class="pagination">
+                <a href="javascript:void(0)" class="first " title="처음으로">처음으로</a>
+                <a href="javascript:void(0)" class="prev " title="이전 1페이지 이동">이전으로</a>
+                <a href="#" title="현재 1페이지" class="on">1</a>
+                <a href="javascript:void(0)" class="">2</a>
+                <a href="javascript:void(0)" class="">3</a>
+                <a href="javascript:void(0)" class="">4</a>
+                <a href="javascript:void(0)">5</a>
+                <a href="javascript:void(0)">6</a>
+                <a href="javascript:void(0)" class="next" title="다음 6페이지 이동">next</a>
+                <a href="javascript:void(0)" class="last" title="끝 페이지로">last</a>
+            </span>
+
+        </div> -->
+
+    </div>
+</section>
+
+<!-- <script src="teacher/js/teacher.js"></script> -->
+<script src="js/qrcode.js"></script>
+<script src="js/qrcode.min.js"></script>
+<script src="js/jquery.min.js"></script>
+<script>
+    $(document).on('click', '.w3-btn', function () {
+        // $('.qr-btn-font').click(function () {
+        var basic_url_path = "/student/evaluate_exercise/question/?question_id=";
+        var question_id = $(this).attr('id');
+        // $('#qr_code_url').val('{{ request.scheme }}://{{ request.get_host }}' + basic_url_path + question_id);
+        $('#qr_code_url').val('http://wai.best' + basic_url_path + question_id);
+        var e = $.Event("keyup", { keyCode: 13 });
+        $('#qr_code_url').focus();
+        $('#qr_code_url').trigger(e);
+        $('#' + question_id).focus();
+        $('#' + question_id).trigger(e);
+        // });
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        $("#linkCopy-QRcode").click(function () {
+            var QRcodeLink = document.getElementById("qr_code_url");
+            QRcodeLink.select();
+            document.execCommand("copy");
+            alert("URL이 클립보드에 복사되었습니다.");
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        $("#downlad-QRcodeImage").click(function () {
+            var src = $('#qrcode').children('img').attr("src");
+            var a = $("<a>")
+                .attr("href", src)
+                .attr("download", "QRcode.png")
+                .appendTo("body");
+
+            a[0].click();
+
+            a.remove();
+        });
+    });
+</script>
+
+<% include ./footer %>
+
+<% } else { %>
+
+<script>
+    alert('로그인을 하셔야 이용이 가능합니다. 먼저 로그인을 해주세요.');
+    document.location.href = "login";
+</script>
+
+<% } %>
