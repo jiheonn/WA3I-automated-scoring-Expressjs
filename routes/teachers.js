@@ -27,6 +27,24 @@ router.get('/home', (req, res) => {
   res.render('teachers/home', {session: session});
 });
 
+router.get('/bigram-tree', (req, res) => {
+  const session = req.session;
+
+  res.render('teachers/bigram_tree', {session: session});
+});
+
+router.get('/topic-analysis', (req, res) => {
+  const session = req.session;
+
+  res.render('teachers/topic_analysis', {session: session});
+});
+
+router.get('/response-analysis', (req, res) => {
+  const session = req.session;
+
+  res.render('teachers/response_analysis', {session: session});
+});
+
 router.get('/QR-code', (req, res) => {
   const session = req.session;
 
