@@ -1,0 +1,297 @@
+<% if (session.teacher_id) { %>
+
+<% include ./header %>
+
+<script>
+    function tableToExcel(id) {
+        var data_type = 'data:application/vnd.ms-excel;charset=utf-8';
+        var table_html = encodeURIComponent(document.getElementById(id).outerHTML);
+
+        var a = document.createElement('a');
+        a.href = data_type + ',%EF%BB%BF' + table_html;
+        a.download = 'result' + '_excel' + '.xls';
+        a.click();
+    }
+</script>
+
+<section class="sub_section">
+    <div class="container">
+        <div class="page-header sub">
+            <h2>결과보기</h2>
+            <p>학생들이 제출한 결과입니다.<br>
+                제출한 결과는 다운로드 버튼을 클릭하여 Excel 파일로 저장이 가능합니다.</p>
+        </div>
+
+        <!-- Heading Row -->
+        <div class="row justify-content-center my-3">
+
+            <!-- /.col-md-4 -->
+        </div>
+
+        <% if (assignment_type == '숙제하기') { %>
+
+        <form action="{% url 'teacher_chart' %}" method="POST">
+            {% csrf_token %}
+
+            {% for data in result %}
+            <input type="hidden" name="student_name" value="{{ data.student_name }}">
+            <input type="hidden" name="student_score" value="{{ data.student_average_score }}">
+            {% endfor %}
+
+            <div style="margin-bottom: 50px;">
+                <table border="0" width="1200" height="100" align="center" class="display bg_w dataTable">
+                    <thead>
+                        <tr align="center" class="table-tr asi_info_tr" style="height: 50px;">
+                            <th>제목</th>
+                            <th>타입</th>
+                            <th>코드</th>
+                            <th>기간</th>
+                            <th>학년</th>
+                            <th class="class-box-width">반</th>
+                            <th>문항수</th>
+                            <th>전체 평균점수</th>
+                            <th>평균 진행률(%)</th>
+                            <th>결과 저장</th>
+                            <th>더보기</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for data in assignment_data|slice:":1" %}
+                        <tr align="center">
+                            <td>{{ data.assignment_title }}</td>
+                            <td>{{ data.type }}</td>
+                            <td>{{ data.assignment_id }}</td>
+                            <td>{{ data.start_date }} ~<br> {{ data.end_date }}</td>
+                            <td>{{ data.grade }}</td>
+                            <td>{{ data.school_class }}</td>
+                            <td>{{ question_count }}</td>
+                            <td>{{ all_avg }}</td>
+                            <td>{{ all_pgs }}</td>
+                            <td>
+                                <button type="button" class="btn21" onclick="tableToExcel('asi_info')">다운로드</button>
+                            </td>
+                            <td>
+                                <button type="submit" class="btn21">더보기</button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+
+            <div style="margin-bottom: 50px;">
+                <table border="0" width="1200" height="100" align="center" class="display bg_w dataTable">
+                    <thead>
+                        <tr align="center" class="table-tr asi_info_tr" style="height: 50px;">
+                            <th>문제 번호</th>
+                            <th>문제 명</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for data in question_name_list %}
+                        <tr align="center" style="height: 40px;">
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ data.question__question_name }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div>
+                <table id="asi_info" class="display dataTable no-footer" role="grid" aria-describedby="asi_info_info">
+                    <thead>
+                        <tr class="asi_info_tr" role="row">
+                            <th width="90" class="sorting_asc" tabindex="0" aria-controls="asi_info" rowspan="1"
+                                colspan="1" aria-sort="ascending" aria-label="학생ID: activate to sort column descending"
+                                style="width: 90px;">
+                                학생ID</th>
+                            <th width="70" class="sorting" tabindex="0" aria-controls="asi_info" rowspan="1" colspan="1"
+                                aria-label="학생이름: activate to sort column ascending" style="width: 70px;">학생이름</th>
+                            <th width="70" class="sorting" tabindex="0" aria-controls="asi_info" rowspan="1" colspan="1"
+                                aria-label="평균점수: activate to sort column ascending" style="width: 70px;">평균점수</th>
+                            <th width="80" class="sorting" tabindex="0" aria-controls="asi_info" rowspan="1" colspan="1"
+                                aria-label="진행률(%): activate to sort column ascending" style="width: 80px;">진행률(%)</th>
+                            <th width="150" class="sorting" tabindex="0" aria-controls="asi_info" rowspan="1"
+                                colspan="1" aria-label="문제별 제출 횟수: activate to sort column ascending"
+                                style="width: 150px;">문제별 제출 횟수</th>
+                            <th width="150" class="sorting" tabindex="0" aria-controls="asi_info" rowspan="1"
+                                colspan="1" aria-label="문제별 정답 여부: activate to sort column ascending"
+                                style="width: 150px;">문제별 정답 여부</th>
+                            <th class="sorting" tabindex="0" aria-controls="asi_info" rowspan="1" colspan="1"
+                                aria-label="학생응답: activate to sort column ascending" style="width: 620px;">학생응답</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for data in result %}
+                        <tr id="asi_tr" align="center" role="row" class="odd">
+                            <td>{{ data.student_id }}</td>
+                            <td>{{ data.student_name }}</td>
+                            <td>{{ data.student_average_score }}</td>
+                            <td>{{ data.student_progress}}</td>
+                            <td>
+                                <br>
+                                {% for submission in data.student_submission %}
+                                {{ submission }}
+                                <br><br>
+                                {% endfor %}
+                            </td>
+                            <td>
+                                <br>
+                                {% for score in data.student_score %}
+                                {% if score == 1 %}
+                                <span style="color: blue;">O</span>
+                                <br><br>
+                                {% else %}
+                                <span style="color: red;">X</span>
+                                <br><br>
+                                {% endif %}
+                                {% endfor %}
+                            </td>
+                            <td style="text-align: left;">
+                                <br>
+                                {% for response in data.student_response %}
+                                <strong>문제 {{ forloop.counter }})</strong><span> {{ response }}</span>
+                                <br><br>
+                                {% endfor %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </form>
+
+        <% } else if (assignment_type == '학습평가') { %>
+
+        <form action="{% url 'teacher_chart' %}" method="POST">
+            {% csrf_token %}
+            {% for data in result %}
+            <input type="hidden" name="student_name" value="{{ data.student_name }}">
+            <input type="hidden" name="student_score" value="{{ data.student_average_score }}">
+            {% endfor %}
+
+            <div style="margin-bottom: 100px;">
+                <table border="0" width="1200" height="100" align="center" class="display bg_w dataTable">
+                    <thead>
+                        <tr align="center" class="table-tr asi_info_tr" style="height: 50px;">
+                            <th>제목</th>
+                            <th>타입</th>
+                            <th>코드</th>
+                            <th>기간</th>
+                            <th>학년</th>
+                            <th class="class-box-width">반</th>
+                            <th>문항수</th>
+                            <th>전체 평균점수</th>
+                            <th>평균 진행률(%)</th>
+                            <th>결과 저장</th>
+                            <th>더보기</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for data in assignment_data|slice:":1" %}
+                        <tr align="center">
+                            <td>{{ data.assignment_title }}</td>
+                            <td>{{ data.type }}</td>
+                            <td>{{ data.assignment_id }}</td>
+                            <td>{{ data.start_date }} ~<br> {{ data.end_date }}</td>
+                            <td>{{ data.grade }}</td>
+                            <td>{{ data.school_class }}</td>
+                            <td>{{ question_count }}</td>
+                            <td>{{ all_avg }}</td>
+                            <td>{{ all_pgs }}</td>
+                            <td>
+                                <button type="button" class="btn21" onclick="tableToExcel('asi_info')">다운로드</button>
+                            </td>
+                            <td>
+                                <button type="submit" class="btn21">더보기</button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div style="margin-top: -50px; margin-bottom: 50px;">
+                <table border="0" width="1200" height="100" align="center" class="display bg_w dataTable">
+                    <thead>
+                        <tr align="center" class="table-tr asi_info_tr" style="height: 50px;">
+                            <th>문제 번호</th>
+                            <th>문제 명</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for data in question_name_list %}
+                        <tr align="center" style="height: 40px;">
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ data.question__question_name }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div>
+                <table id="asi_info" class="display dataTable no-footer" role="grid" aria-describedby="asi_info_info">
+                    <thead>
+                        <tr class="asi_info_tr">
+                            <th width="90">학생ID</th>
+                            <th width="70">학생이름</th>
+                            <th width="70">평균점수</th>
+                            <th width="80">진행률(%)</th>
+                            <th width="130">문제별 정답 여부</th>
+                            <th>학생응답</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for data in result %}
+                        <tr id="asi_tr" align="center">
+                            <td>{{ data.student_id }}</td>
+                            <td>{{ data.student_name }}</td>
+                            <td>{{ data.student_average_score }}</td>
+                            <td>{{ data.student_progress}}</td>
+                            <td>
+                                <br>
+                                {% for score in data.student_score %}
+                                {% if score == 1 %}
+                                <span style="color: blue;">O</span>
+                                <br><br>
+                                {% else %}
+                                <span style="color: red;">X</span>
+                                <br><br>
+                                {% endif %}
+                                {% endfor %}
+                            </td>
+                            <td style="text-align: left;">
+                                <br>
+                                {% for response in data.student_response %}
+                                <strong>문제 {{ forloop.counter }})</strong> {{ response }}
+                                <br><br>
+                                {% endfor %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </form>
+
+        <% } %>
+
+    </div>
+</section>
+
+<% include ./footer %>
+
+<% } else { %>
+
+<script>
+    alert('로그인을 하셔야 이용이 가능합니다. 먼저 로그인을 해주세요.');
+    document.location.href = "login";
+</script>
+
+<% } %>

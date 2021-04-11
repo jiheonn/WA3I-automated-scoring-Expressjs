@@ -1,0 +1,82 @@
+<% if (session.teacher_id) { %>
+
+<% include ./header %>
+
+<section class="sub_section">
+    <div class="container">
+        <form action="make-question" method="POST">
+            <!-- Heading Row -->
+            <div class="row justify-content-center">
+                <div class="page-header sub">
+                    <h2>문항생성</h2>
+                    <p>
+                        좋은 문항을 학생들이 학습할 수 있도록 공유해 주세요.<br>
+                        문항 입력 방법은 활용가이드에서 확인해주세요.
+                    </p>
+                </div>
+
+                <div class="col-12 sct-center m-0">
+                    <span>
+                        <input id="as_name" type="text" name="question_name" placeholder="문항 제목을 입력해 주세요."
+                            style="width: 100%; vertical-align: top; margin-top: 10px"></span><br><br>
+                    <span style=" margin-top: 0;">
+                        <textarea id="as_description" type="text" name="description" placeholder="문항 내용을 작성해 주세요."
+                            style="width: 100%; vertical-align: top; margin-top: 10px; padding-left: 10px; padding-top: 10px; height: 110px;"></textarea></span><br>
+                    <strong>그림 또는 사진 파일은 아래의 버튼을 클릭하여 업로드해 주세요.</strong><br>
+                    <input type="file" name="image">
+                </div>
+
+                <div class="col-12 pt-4">
+                    <table border="0" bordercolor="gray" width="1000" align="center" id="hint-answer-table">
+                        <tbody>
+                            <tr name="trQuestion" align="center" bgcolor="#2E4A62">
+                                <th height="40px">도움 생각</th>
+                                <th height="40px">모범 답안</th>
+                            </tr>
+                            <tr>
+                                <td><textarea type="text" name="hint" placeholder="도움 생각을 작성해 주세요."></textarea></td>
+                                <td><textarea type="text" name="answer" placeholder="모범 답안을 작성해 주세요."></textarea></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table id="questionTable" border="0" bordercolor="gray" width="1000" align="center">
+                        <tbody>
+                            <tr name="trQuestion" align="center" bgcolor="#2E4A62">
+                                <th height="40px">채점 준거</th>
+                            </tr>
+                            <tr>
+                                <td><textarea type="text" name="mark_text" placeholder="채점 준거를 작성해 주세요."></textarea>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="col-12 d-flex  justify-content-center p-0 m-0">
+                    <button type="button" id="add-btn" class="btn3 mt-0 mr-0 p-0 w3-indigo"
+                        style="height: 40px; ">추가</button>
+                    <button type="button" id="del-btn" class="btn3 mt-0 p-0 w3-indigo" style="height: 40px;">삭제</button>
+
+                </div>
+
+                <button id="make-btn" type="submit"
+                    class=" w3-btn w3-round w3-blue w3-display-bottomleft w3-margin-bottom ml-auto"
+                    style="position: relative; right: 0; top: -55px">
+                    문항 생성 완료
+                </button>
+
+            </div>
+        </form>
+    </div>
+</section>
+
+<% include ./footer %>
+
+<% } else { %>
+
+<script>
+    alert('로그인을 하셔야 이용이 가능합니다. 먼저 로그인을 해주세요.');
+    document.location.href = "login";
+</script>
+
+<% } %>

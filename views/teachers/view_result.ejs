@@ -1,0 +1,70 @@
+<% if (session.teacher_id) { %>
+
+<% include ./header %>
+
+<section class="sub_section">
+    <div class="container">
+        <div class="page-header sub">
+            <h2>결과보기</h2>
+            <p>선생님께서 학생들에게 내주신 과제 목록입니다.<br>
+                더보기를 클릭하시면 학생들이 제출한 결과를 확인할 수 있습니다.</p>
+        </div>
+
+        <div class="container p-0">
+            <!-- <form id="view_detail_form" action="{% url 'teacher_view_result_detail' %}" method="GET"> -->
+                <table id="asi_info" class="display dataTable no-footer" role="grid" aria-describedby="asi_info_info">
+                    <thead>
+                        <tr class="asi_info_tr" role="row">
+                            <th class="sorting_asc" tabindex="0" aria-controls="asi_info" rowspan="1" colspan="1"
+                                aria-sort="ascending" aria-label="제목: activate to sort column descending"
+                                style="width: 137px;">제목
+                            </th>
+                            <th class="sorting" tabindex="0" aria-controls="asi_info" rowspan="1" colspan="1"
+                                aria-label="타입: activate to sort column ascending" style="width: 72px;">타입</th>
+                            <th class="sorting" tabindex="0" aria-controls="asi_info" rowspan="1" colspan="1"
+                                aria-label="코드: activate to sort column ascending" style="width: 100px;">코드</th>
+                            <th class="sorting" tabindex="0" aria-controls="asi_info" rowspan="1" colspan="1"
+                                aria-label="기간: activate to sort column ascending" style="width: 341px;">기간</th>
+                            <th class="sorting" tabindex="0" aria-controls="asi_info" rowspan="1" colspan="1"
+                                aria-label="학년: activate to sort column ascending" style="width: 52px;">학년</th>
+                            <th class="sorting" tabindex="0" aria-controls="asi_info" rowspan="1" colspan="1"
+                                aria-label="반: activate to sort column ascending" style="width: 31px;">반</th>
+                            <!-- <th class="sorting" tabindex="0" aria-controls="asi_info" rowspan="1" colspan="1"
+                                aria-label="더보기: activate to sort column ascending" style="width: 95px;">더보기</th> -->
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <% for (var data of assignment_data) { %>
+                        <tr id="asi_tr" align="center" role="row" class="odd">
+                            <td><a href="/teachers/view-result/<%= data.assignment_id %>"><%= data.assignment_title %></a></td>
+                            <td><%= data.type %></td>
+                            <td><%= data.assignment_id %></td>
+                            <td><%= data.start_date %> &nbsp ~ &nbsp<%= data.end_date %></td>
+                            <td><%= data.grade %></td>
+                            <td><%= data.school_class %></td>
+                            <!-- <td>
+                                <a href="/teachers/view-result/<%= data.assignment_id %>">
+                                    더보기
+                                </a>
+                            </td> -->
+                        </tr>
+                        <% } %>
+
+                    </tbody>
+                </table>
+            <!-- </form> -->
+        </div>
+    </div>
+</section>
+
+<% include ./footer %>
+
+<% } else { %>
+
+<script>
+    alert('로그인을 하셔야 이용이 가능합니다. 먼저 로그인을 해주세요.');
+    document.location.href = "login";
+</script>
+
+<% } %>
