@@ -44,7 +44,7 @@
         <!-- {% block head_class %} -->
         <div class="wrap">
             <!-- {% endblock %} -->
-            <form id="view_result_form" action="teacher_view_result" method="POST">
+            <!-- <form id="view_result_form" action="teacher_view_result" method="POST"> -->
                 <!-- {% csrf_token %}
             <input id="teacher_id" name="teacher_id" type="hidden" value="{{ user.teacher_id }}"> -->
                 <header class="header">
@@ -55,34 +55,34 @@
                             </a>
                             <ul class="navbar-nav mr-auto">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="home">홈</a>
+                                    <a class="nav-link" href="/teachers/home">홈</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="teacher_question_selection">문항선택</a>
+                                    <a class="nav-link" href="/teachers/question-selection">문항선택</a>
                                 </li>
                                 <li id="view_result" class="nav-item">
-                                    <a class="nav-link" href="#">결과보기</a>
+                                    <a class="nav-link" href="/teachers/view-result">결과보기</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="teacher_make_question">문항생성</a>
+                                    <a class="nav-link" href="/teachers/make-question">문항생성</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="bigram-tree">Bigram Tree</a>
+                                    <a class="nav-link" href="/teachers/bigram-tree">Bigram Tree</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="topic-analysis">주제분석</a>
+                                    <a class="nav-link" href="/teachers/topic-analysis">주제분석</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="response-analysis">응답분석</a>
+                                    <a class="nav-link" href="/teachers/response-analysis">응답분석</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="QR-code">QR코드</a>
+                                    <a class="nav-link" href="/teachers/QR-code">QR코드</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="notice">공지사항</a>
+                                    <a class="nav-link" href="/teachers/notice">공지사항</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="handbook">활용가이드</a>
+                                    <a class="nav-link" href="/teachers/handbook">활용가이드</a>
                                 </li>
                             </ul>
                             <ul class="nav nav-pills">
@@ -97,4 +97,4 @@
                         </div>
                     </nav>
                 </header>
-            </form>
+            <!-- </form> -->
