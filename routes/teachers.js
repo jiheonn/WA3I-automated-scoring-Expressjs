@@ -6,7 +6,6 @@ const db = require('../lib/db');
 /* GET teachers listing. */
 router.get('/login', (req, res, next) => {
   const session = req.session;
-  console.log(session);
   if (session.teacher_id) res.redirect('home');
   else res.render('teachers/login');
 });
@@ -28,6 +27,62 @@ router.get('/home', (req, res) => {
   res.render('teachers/home', {session: session});
 });
 
+router.get('/QR-code', (req, res) => {
+  const session = req.session;
+
+  db.query('SELECT * FROM category;', (err, row) => {
+    if (err) throw err;
+    db.query('SELECT * FROM question WHERE upload_check = true;', (err, results) => {
+      if (err) throw err;
+      res.render('teachers/QR_code', {
+        session: session,
+        category_data: row,
+        question_list: results
+      });
+    });
+  });
+});
+
+router.get('/QR-code-search', (req, res) => {
+  const session = req.session;
+  
+  const option = req.query.option;
+  const user_input = req.query.user_input;
+  
+  let sql;
+  if ((option != 'select') && (user_input != '')) {
+    sql = `SELECT * FROM question AS q \
+            JOIN category AS c ON q.category_id = c.category_id \
+            JOIN keyword AS k ON q.question_id = k.question_id \
+            WHERE c.category_name = "${option}" \
+            AND q.upload_check = true \
+            AND (q.question_name LIKE "%${user_input}% OR k.keyword_name LIKE "%${user_input}%");"`;
+  } else if (option != 'select') {
+    sql = `SELECT * FROM question AS q \
+            JOIN category AS c ON q.category_id = c.category_id \
+            WHERE c.category_name = "${option}" \
+            AND q.upload_check = true;`;
+  } else if (user_input != '') {
+    sql = `SELECT DISTINCT q.question_id, q.question_name, q.image FROM question AS q\
+            JOIN keyword AS k ON q.question_id = k.question_id \
+            WHERE (q.question_name LIKE "%${user_input}%" OR k.keyword_name LIKE "%${user_input}%") \
+            AND q.upload_check = true;`;
+  } else {
+    sql = 'SELECT * FROM question WHERE upload_check = true;';
+  }
+  db.query('SELECT * FROM category;', (err, row) => {
+    if (err) throw err;
+    db.query(sql, (err, results) => {
+      if (err) throw err;
+      res.render('teachers/QR_code', {
+        session: session,
+        category_data: row,
+        question_list: results
+      });
+    });
+  });
+});
+
 router.get('/notice', (req, res) => {
   const session = req.session;
 
@@ -38,6 +93,18 @@ router.get('/notice', (req, res) => {
       notice_value.made_date = moment(notice_value.made_date).format('YYYY년 MM월 DD일');
     }
     res.render('teachers/notice', {session: session, data: results});
+  });
+});
+
+router.get('/notice/:id', (req, res) => {
+  const session = req.session;
+  const notice_id = req.params.id;
+  db.query(`SELECT * FROM notice WHERE notice_id = "${notice_id}";`, (err, results) => {
+    if (err) throw err;
+
+    let notice = results[0];
+    notice.made_date = moment(notice.made_date).format('YYYY년 MM월 DD일');
+    res.render('teachers/notice_detail', {session: session, data: notice});
   });
 });
 
