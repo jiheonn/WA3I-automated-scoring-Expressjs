@@ -4,6 +4,8 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const session = require('express-session');
+// const multer = require('multer');
+// const upload = multer({dest: './public/static/'});
 
 const indexRouter = require('./routes/index');
 const teachersRouter = require('./routes/teachers');
