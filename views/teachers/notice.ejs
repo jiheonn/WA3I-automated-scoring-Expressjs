@@ -22,7 +22,6 @@
 		</div>
 
 		<div class="container">
-			<form action="/teachers/notice" method="GET">
 				<table id="notice_info" class="display dataTable no-footer" role="grid" aria-describedby="notice_info_info">
 					<thead>
 						<tr style="background-color: #343a40; color: white; text-align: center;" role="row">
@@ -44,10 +43,9 @@
 							<td><%= notice_value.notice_target %></td>
 
 							<td style="text-align: left;">
-								<button type="submit" class="w3-round w3-dark noticeViewDetail" name="selected_notice_id"
-									value="<%= notice_value.notice_id %>">
+								<a class="w3-round w3-dark noticeViewDetail" href="/teachers/notice/<%= notice_value.notice_id %>">
 									<%= notice_value.notice_name %>
-								</button>
+								</a>
 							</td>
 							<td><%= notice_value.made_date %></td>
 						</tr>
@@ -55,7 +53,6 @@
 
 					</tbody>
 				</table>
-			</form>
 		</div>
 	</div>
 </section>
