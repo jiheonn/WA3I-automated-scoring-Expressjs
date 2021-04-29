@@ -3,6 +3,7 @@ node_modules
 
 # db connect config
 config.json
+config.js
 
 # Editor directories and files
 .idea
