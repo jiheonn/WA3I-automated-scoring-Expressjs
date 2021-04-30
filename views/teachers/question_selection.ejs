@@ -220,7 +220,7 @@
             </div>
         </div> -->
 
-			<form id="question_select_form" action="{% url 'teacher_question_selection_save' %}" method="POST">
+			<form id="question_select_form" action="/teachers/question-selection" method="POST">
 				<!-- <input type="hidden" name="teacher_id" value="{{ user.teacher_id }}"> -->
 				<div class="container" style="margin-top: 40px;">
 
@@ -251,15 +251,15 @@
 					<input id="code_num" type="text" name="code_num" placeholder="코드 생성 버튼을 클릭해 주세요." maxlength="8"
 						style="text-align: center;">
 					<a id="code_generate" class="w3-button w3-large w3-round w3-blue">생성</a><br>
-					<input type="text" id="as_name" name="question-title" maxlength="36" placeholder="시험지 제목을 입력해 주세요."
+					<input type="text" id="as_name" name="question_title" maxlength="36" placeholder="시험지 제목을 입력해 주세요."
 						style="text-align: center;">
 					<span class="spn-margin">&nbsp;학년 : <input class="sct-input sct-ipt-top20" type="text"
 							name="grade"></span>
 					<span class="spn-margin">반 : <input class="sct-input sct-ipt-top10" type="text"
 							name="class"></span><br>
 
-					<span>시작날짜 : <input type="date" id="start-date" name="start-date" placeholder="시작날짜"></span>
-					<span class="span-left">종료날짜 : <input type="date" id="end-date" name="end-date"
+					<span>시작날짜 : <input type="date" id="start-date" name="start_date" placeholder="시작날짜"></span>
+					<span class="span-left">종료날짜 : <input type="date" id="end-date" name="end_date"
 							placeholder="종료날짜"></span><br>
 				</div>
 

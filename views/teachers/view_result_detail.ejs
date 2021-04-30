@@ -30,8 +30,7 @@
 
         <% if (assignment_type == '숙제하기') { %>
 
-        <form action="{% url 'teacher_chart' %}" method="POST">
-            {% csrf_token %}
+        <form action="/teachers/view-result/<%= assignment_id %>/chart" method="POST">
 
             {% for data in result %}
             <input type="hidden" name="student_name" value="{{ data.student_name }}">
@@ -58,17 +57,14 @@
 
                     <tbody>
 
-                        {% for data in assignment_data|slice:":1" %}
+                        <% for (var data of assignment_data) { %>
                         <tr align="center">
-                            <td>{{ data.assignment_title }}</td>
-                            <td>{{ data.type }}</td>
-                            <td>{{ data.assignment_id }}</td>
-                            <td>{{ data.start_date }} ~<br> {{ data.end_date }}</td>
-                            <td>{{ data.grade }}</td>
-                            <td>{{ data.school_class }}</td>
-                            <td>{{ question_count }}</td>
-                            <td>{{ all_avg }}</td>
-                            <td>{{ all_pgs }}</td>
+                            <td><%= data.assignment_title %></td>
+                            <td><%= data.type %></td>
+                            <td><%= data.assignment_id %></td>
+                            <td><%= data.start_date %> ~<br> <%= data.end_date %></td>
+                            <td><%= data.grade %></td>
+                            <td><%= data.school_class %></td>
                             <td>
                                 <button type="button" class="btn21" onclick="tableToExcel('asi_info')">다운로드</button>
                             </td>
@@ -76,7 +72,7 @@
                                 <button type="submit" class="btn21">더보기</button>
                             </td>
                         </tr>
-                        {% endfor %}
+                        <% } %>
 
                     </tbody>
                 </table>
@@ -91,12 +87,16 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for data in question_name_list %}
-                        <tr align="center" style="height: 40px;">
-                            <td>{{ forloop.counter }}</td>
-                            <td>{{ data.question__question_name }}</td>
-                        </tr>
-                        {% endfor %}
+                        <% for (var i=0; i < question_list.length; i++) { %>
+                            <tr align="center" style="height: 40px;">
+                                <td>
+                                    <%= i+1 %>
+                                </td>
+                                <td>
+                                    <%= question_list[i].question_name %>
+                                </td>
+                            </tr>
+                        <% } %>
                     </tbody>
                 </table>
             </div>
@@ -169,7 +169,6 @@
         <% } else if (assignment_type == '학습평가') { %>
 
         <form action="{% url 'teacher_chart' %}" method="POST">
-            {% csrf_token %}
             {% for data in result %}
             <input type="hidden" name="student_name" value="{{ data.student_name }}">
             <input type="hidden" name="student_score" value="{{ data.student_average_score }}">
@@ -193,17 +192,14 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for data in assignment_data|slice:":1" %}
+                        <% for (var data of assignment_data) { %>
                         <tr align="center">
-                            <td>{{ data.assignment_title }}</td>
-                            <td>{{ data.type }}</td>
-                            <td>{{ data.assignment_id }}</td>
-                            <td>{{ data.start_date }} ~<br> {{ data.end_date }}</td>
-                            <td>{{ data.grade }}</td>
-                            <td>{{ data.school_class }}</td>
-                            <td>{{ question_count }}</td>
-                            <td>{{ all_avg }}</td>
-                            <td>{{ all_pgs }}</td>
+                            <td><%= data.assignment_title %></td>
+                            <td><%= data.type %></td>
+                            <td><%= data.assignment_id %></td>
+                            <td><%= data.start_date %> ~<br> {{ data.end_date %></td>
+                            <td><%= data.grade %></td>
+                            <td><%= data.school_class %></td>
                             <td>
                                 <button type="button" class="btn21" onclick="tableToExcel('asi_info')">다운로드</button>
                             </td>
@@ -211,7 +207,7 @@
                                 <button type="submit" class="btn21">더보기</button>
                             </td>
                         </tr>
-                        {% endfor %}
+                        <% } %>
                     </tbody>
                 </table>
             </div>
@@ -225,12 +221,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for data in question_name_list %}
+                        <% for (var i = 0; i < question_list.length; i++) { %>
                         <tr align="center" style="height: 40px;">
-                            <td>{{ forloop.counter }}</td>
-                            <td>{{ data.question__question_name }}</td>
+                            <td><%= i+1 %></td>
+                            <td><%= question_list[i].question_name %></td>
                         </tr>
-                        {% endfor %}
+                        <% } %>
                     </tbody>
                 </table>
             </div>
