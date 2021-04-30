@@ -40,10 +40,10 @@ $(document).ready(function () {
         var as_description = $("#as_description").val();
         var result = confirm(
             "문항제목 : " +
-                as_name +
-                "\n문항내용 :\n" +
-                as_description +
-                "\n\n입력한 정보로 생성하겠습니까?"
+            as_name +
+            "\n문항내용 :\n" +
+            as_description +
+            "\n\n입력한 정보로 생성하겠습니까?"
         );
         if (result) {
         } else {
@@ -104,7 +104,7 @@ $("#question_select_form").keydown(function (event) {
             return;
         }
     }
- });
+});
 
 $(document).ready(function () {
     $("#code_num").keyup(function () {
@@ -125,18 +125,18 @@ $(document).ready(function () {
         var en_date = $("#end-date").val();
         var result = confirm(
             "코드 : " +
-                code_num +
-                "\n시험지 제목 : " +
-                as_name +
-                "\n타입 : " +
-                type +
-                "\n문항 수 : " +
-                check_num +
-                "\n시작날짜 : " +
-                st_date +
-                "\n종료날짜 : " +
-                en_date +
-                "\n\n입력한 정보로 생성하겠습니까?"
+            code_num +
+            "\n시험지 제목 : " +
+            as_name +
+            "\n타입 : " +
+            type +
+            "\n문항 수 : " +
+            check_num +
+            "\n시작날짜 : " +
+            st_date +
+            "\n종료날짜 : " +
+            en_date +
+            "\n\n입력한 정보로 생성하겠습니까?"
         );
         if (result) {
             var expireDate = new Date();
@@ -159,10 +159,10 @@ $(document).ready(function () {
             );
 
         $.ajax({
-            url: "/teacher/code_generation/",
+            url: "/teachers/question-selection/check-assignmentid",
             data: { text: text },
             success: function (data) {
-                $("#code_num").val(data.generation_code);
+                $("#code_num").val(data);
             },
         });
     });

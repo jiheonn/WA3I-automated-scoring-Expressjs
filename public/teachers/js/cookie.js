@@ -12,12 +12,12 @@ function delete_question(question_id) {
         var check_cookie_value = $.trim(value.split('=')[0])
         if (check_cookie_value == "selected") {
             var question_ids = $.trim(value.split('=')[1]).split(',')
-            if (question_ids.length == 1){
+            if (question_ids.length == 1) {
                 deleteCookie("selected")
                 location.reload();
             }
-            else{
-                question_ids = jQuery.grep(question_ids, function(value) {
+            else {
+                question_ids = jQuery.grep(question_ids, function (value) {
                     return value != question_id;
                 });
                 document.cookie = "selected" + "=" + question_ids;
@@ -40,11 +40,10 @@ $(document).ready(function () {
     if (document.cookie.indexOf("selected") >= 0) {
         var question_ids = getCookie("selected");
         $.ajax({
-            url: "/teacher/question_search/",
+            url: "/teachers/question-selection/selected",
             data: { question_id: question_ids },
             success: function (data) {
-                var search_data = data.search_data;
-                var num = search_data.length;
+                var num = data.length;
                 if (num == 0) {
                     alert("검색 결과가 존재하지 않습니다.");
                 } else {
@@ -53,30 +52,30 @@ $(document).ready(function () {
                             '<div class="col-md-3 mb-5">' +
                             '<div class="card h-100" align="center">' +
                             '<div class="card-body p-0"  onclick ="delete_question(' +
-                            search_data[i].question_id +
+                            data[i].question_id +
                             ')">' +
                             '<img id="' +
-                            search_data[i].question_id + 
+                            data[i].question_id +
                             '" class="img-fluid rounded mb-4 mb-lg-0" src="' +
-                            "/media/" +
-                            search_data[i].question_image +
+                            "/static/" +
+                            data[i].image +
                             '" style="width:200px; height:200px;">' +
                             "</div>" +
                             '<span class="card-footer">' +
                             '<label id="' +
-                            search_data[i].question_id +
+                            data[i].question_id +
                             '">' +
-                            search_data[i].question_name +
+                            data[i].question_name +
                             "</label>" +
                             "</span>" +
                             '<span class="card-footer remove_list">' +
                             '<input type="hidden" name="question" class="questions" value="' +
-                            search_data[i].question_id +
+                            data[i].question_id +
                             '">' +
                             '<label onclick ="delete_question(' +
-                            search_data[i].question_id +
+                            data[i].question_id +
                             ')" id="' +
-                            search_data[i].question_id +
+                            data[i].question_id +
                             '"> <span class="colorRed">- </span> 문항 삭제</label>' +
                             "</span>" +
                             "</div>" +
