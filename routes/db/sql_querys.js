@@ -463,7 +463,7 @@ exports.selectAssignmentInfo = function selectAssignmentInfo(assignmentID) {
 // 해당 문제를 푼 학생들의 정보 조희
 exports.selectAssignmentSolveList = function selectAssignmentSolveList(assignmentID) {
   return new Promise((resolve, reject) => {
-    pool.getConnection((err, conncetion) => {
+    pool.getConnection((err, connection) => {
       if (!err) {
         var sql = `
         SELECT
@@ -479,12 +479,12 @@ exports.selectAssignmentSolveList = function selectAssignmentSolveList(assignmen
         WHERE q.upload_check = 1
         AND rel.assignment_id = ?;
         `;
-        conncetion.query(sql, [assignmentID], (err, rows) => {
+        connection.query(sql, [assignmentID], (err, rows) => {
           if (err) reject(err);
           resolve(rows);
         });
       }
-      conncetion.release();
+      connection.release();
     });
   });
 }
@@ -492,7 +492,7 @@ exports.selectAssignmentSolveList = function selectAssignmentSolveList(assignmen
 // 해당 과제의 문항들 조회
 exports.selectAssignmentQuestionList = function selectAssignmentQuestionList(assignmentID) {
   return new Promise((resolve, reject) => {
-    pool.getConnection((err, conncetion) => {
+    pool.getConnection((err, connection) => {
       if (!err) {
         var sql = `
         SELECT
@@ -508,12 +508,129 @@ exports.selectAssignmentQuestionList = function selectAssignmentQuestionList(ass
         WHERE q.upload_check = 1
         AND rel.assignment_id = ?;
         `;
-        conncetion.query(sql, [assignmentID], (err, rows) => {
+        connection.query(sql, [assignmentID], (err, rows) => {
           if (err) reject(err);
           resolve(rows);
         });
       }
-      conncetion.release();
+      connection.release();
     });
   });
 }
+
+// 과제 번호 조회
+exports.selectAssignmentID = function selectAssignmentID(assignmentID) {
+  return new Promise((resolve, reject) => {
+    pool.getConnection((err, connection) => {
+      if (!err) {
+        var sql = `
+        SELECT
+          *
+        FROM
+          assignment
+        WHERE
+          assignment_id = ?
+        `;
+        connection.query(sql, [assignmentID], (err, rows) => {
+          if (err) reject(err);
+          resolve(rows);
+        });
+      }
+      connection.release();
+    });
+  });
+}
+
+exports.selectQuestionInfo = function selectQuestionInfo(questionIDList) {
+  return new Promise((resolve, reject) => {
+    pool.getConnection((err, connection) => {
+      if (!err) {
+        var sql = `
+        SELECT
+          *
+        FROM
+          question
+        WHERE
+          question_id IN (?)
+        `;
+        connection.query(sql, [questionIDList], (err, rows) => {
+          if (err) reject(err);
+          resolve(rows);
+        });
+      }
+      connection.release();
+    });
+  });
+}
+
+exports.insertNewAssignment = function insertNewAssignment(newAssignment) {
+  return new Promise((resolve, reject) => {
+    pool.getConnection((err, connection) => {
+      if (!err) {
+        var sql = `
+        INSERT INTO assignment (
+                              assignment_id,
+                              teacher_id,
+                              assignment_title,
+                              type,
+                              start_date,
+                              end_date,
+                              made_date,
+                              grade,
+                              school_class
+                            )
+        VALUES              (
+                              ?,
+                              ?,
+                              ?,
+                              ?,
+                              ?,
+                              ?,
+                              ?,
+                              ?,
+                              ?
+                            )
+        `;
+        connection.query(sql, [
+          newAssignment.code_num,
+          newAssignment.teacher_id,
+          newAssignment.question_title,
+          newAssignment.evaluation_type,
+          newAssignment.start_date,
+          newAssignment.end_date,
+          newAssignment.made_date,
+          newAssignment.grade,
+          newAssignment.class,
+        ], (err, rows) => {
+          if (err) reject(err);
+          resolve(rows);
+        });
+      }
+      connection.release();
+    });
+  });
+}
+
+// exports.insertNewAssignmentQuestionRel = function insertNewAssignmentQuestionRel(assignmentID, questionID) {
+//   return new Promise((resolve, reject) => {
+//     pool.getConnection((err, connection) => {
+//       if (!err) {
+//         var sql = `
+//         INSERT INTO assignment_question_rel (
+//                               assignment_id,
+//                               question_id,
+//                             )
+//         VALUES              (
+//                               ?,
+//                               ?
+//                             )
+//         `;
+//         connection.query(sql, [assignmentID, questionID], (err, rows) => {
+//           if (err) reject(err);
+//           resolve(rows);
+//         });
+//       }
+//       connection.release();
+//     });
+//   });
+// }

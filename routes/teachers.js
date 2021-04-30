@@ -5,7 +5,7 @@ const router = express.Router();
 const sql_query = require('./db/sql_querys');
 
 
-var session, t_id,
+var session, t_id, a_id,
 
   // pagination
   page_num, content_size, page_size, skip_size,
@@ -15,6 +15,8 @@ var session, t_id,
   // search question
   option, user_input,
   selectCountSearchQuestion, selectSearchQuestion,
+  // question-selection
+  selectAssignmentID, selectQuestionInfo, selected_question_list, newAssignment,
   // view-result
   selectTeacherAssignmentList, selectAssignmentInfo, selectAssignmentSolveList,
   selectAssignmentQuestionList,
@@ -191,6 +193,109 @@ router.get('/question-selection-search', async (req, res) => {
     paged_value;
 });
 
+/* teahcer view "question-selection" > 과제 코드 중복 확인 */
+// /teachers/question-selection/check-assignmentid
+router.get('/question-selection/check-assignmentid', async (req, res) => {
+  try {
+    a_id = req.query.text;
+
+    selectAssignmentID = await sql_query.selectAssignmentID(a_id);
+    if (selectAssignmentID.length == 0) {
+      res.json(a_id);
+    } else {
+      res.json('생성 버튼을 다시 눌러주세요.');
+    }
+
+  } catch (err) {
+    res.status(400);
+  }
+
+  // initialize
+  a_id, selectAssignmentID;
+});
+
+/* teacher view "question-selection" > "+ 문항 추가 버튼" */
+// /teachers/question-selection/selected
+router.get('/question-selection/selected', async (req, res) => {
+  try {
+    // 현재 문자열 값 ex) req.query = { question_id: '4, 5, 3, 9' }
+    selected_question_list = req.query.question_id;
+
+    // 배열로 변환하여 str > int 형 변환
+    selected_question_list = selected_question_list.split(',');
+    for (var i = 0; i < selected_question_list.length; i++) {
+      selected_question_list[i] = parseInt(selected_question_list[i]);
+    }
+
+    selectQuestionInfo = await sql_query.selectQuestionInfo(selected_question_list);
+
+    res.json(selectQuestionInfo);
+
+  } catch (err) {
+    res.status(400);
+  }
+
+  // initialize
+  selected_question_list, selectQuestionInfo
+});
+
+/* teacher view "문항선택" add assignment */
+// /teachers/question-selection
+router.post('/question-selection', async (req, res) => {
+  try {
+    newAssignment = req.body;
+
+    // 과제를 생성한 선생님 id session에서 추출
+    session = req.session;
+    t_id = session.teacher_id;
+
+    newAssignment['teacher_id'] = t_id;
+    // 과제 생성 시점의 날짜
+    newAssignment['made_date'] = moment().format('YYYY-MM-DD');
+
+    console.log(newAssignment);
+
+    // 사용자가 입력한 값 중 빈 칸이 없는 지 확인
+    if (newAssignment.question &&
+      newAssignment.evaluation_type &&
+      newAssignment.code_num &&
+      newAssignment.question_title &&
+      newAssignment.grade &&
+      newAssignment.class &&
+      newAssignment.start_date &&
+      newAssignment.end_date) {
+
+      await sql_query.insertNewAssignment(newAssignment);
+
+      // var count_question = newAssignment.question.length;
+      // var assignment_id = newAssignment.code_num;
+      // for (var i = 0; i > count_question; i++) {
+      //   var question_id = newAssignment.question[i];
+      //   await sql_query.insertNewAssignmentQuestionRel(assignment_id, question_id);
+      // }
+
+      res.send(
+        '<script type="text/javascript"> \
+                alert("문항생성이 완료되었습니다."); \
+                window.location = "question-selection"; \
+              </script>'
+      );
+    } else {
+      res.send(
+        '<script type="text/javascript"> \
+          alert("입력하신 내용 중 빈 칸이 존재합니다."); \
+          window.location = "make-question"; \
+        </script>'
+      );
+    }
+
+  } catch (err) {
+    res.status(400);
+  }
+
+  // initialize
+});
+
 /* teacher view "결과보기" */
 // /teachers/view-result
 router.get('/view-result', async (req, res) => {
@@ -228,11 +333,8 @@ router.get('/view-result/:id', async (req, res) => {
     selectAssignmentInfo = await sql_query.selectAssignmentInfo(a_id);
 
     selectAssignmentSolveList = await sql_query.selectAssignmentSolveList(a_id);
-    //
 
     selectAssignmentQuestionList = await sql_query.selectAssignmentQuestionList(a_id);
-
-    console.log(selectAssignmentSolveList);
 
     for (var assignment_value of selectAssignmentInfo) {
       assignment_value.start_date = moment(assignment_value.start_date).format('YYYY-MM-DD');
