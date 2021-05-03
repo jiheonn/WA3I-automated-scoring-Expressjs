@@ -5,7 +5,7 @@ const router = express.Router();
 const sql_query = require('./db/sql_querys');
 
 
-var session, t_id, a_id,
+let session, t_id, a_id,
 
   // pagination
   page_num, content_size, page_size, skip_size,
@@ -20,8 +20,12 @@ var session, t_id, a_id,
   // view-result
   selectTeacherAssignmentList, selectAssignmentInfo, selectAssignmentSolveList,
   selectAssignmentQuestionList,
+  // make-question
+  new_question, selectLatestMakeQuestionID, make_question_id, made_date,
   // auth
-  user, selectTeacherInfo;
+  user, selectTeacherInfo,
+  // notice
+  selectTeacherNoticeList, notice_id, selectTeacherNoticeDetail, notice;
 
 
 /* teacher view login */
@@ -199,6 +203,7 @@ router.get('/question-selection/check-assignmentid', async (req, res) => {
   try {
     a_id = req.query.text;
 
+    // 생성된 과제 코드가 기존에 존재하는 지 조회
     selectAssignmentID = await sql_query.selectAssignmentID(a_id);
     if (selectAssignmentID.length == 0) {
       res.json(a_id);
@@ -223,7 +228,7 @@ router.get('/question-selection/selected', async (req, res) => {
 
     // 배열로 변환하여 str > int 형 변환
     selected_question_list = selected_question_list.split(',');
-    for (var i = 0; i < selected_question_list.length; i++) {
+    for (let i = 0; i < selected_question_list.length; i++) {
       selected_question_list[i] = parseInt(selected_question_list[i]);
     }
 
@@ -236,7 +241,7 @@ router.get('/question-selection/selected', async (req, res) => {
   }
 
   // initialize
-  selected_question_list, selectQuestionInfo
+  selected_question_list, selectQuestionInfo;
 });
 
 /* teacher view "문항선택" add assignment */
@@ -294,6 +299,7 @@ router.post('/question-selection', async (req, res) => {
   }
 
   // initialize
+  newAssignment;
 });
 
 /* teacher view "결과보기" */
@@ -305,7 +311,7 @@ router.get('/view-result', async (req, res) => {
 
     selectTeacherAssignmentList = await sql_query.selectTeacherAssignmentList(t_id);
 
-    for (var assignment_value of selectTeacherAssignmentList) {
+    for (let assignment_value of selectTeacherAssignmentList) {
       assignment_value.start_date = moment(assignment_value.start_date).format('YYYY-MM-DD');
       assignment_value.end_date = moment(assignment_value.end_date).format('YYYY-MM-DD');
     }
@@ -328,7 +334,7 @@ router.get('/view-result', async (req, res) => {
 router.get('/view-result/:id', async (req, res) => {
   try {
     session = req.session;
-    var a_id = req.params.id;
+    a_id = req.params.id;
 
     selectAssignmentInfo = await sql_query.selectAssignmentInfo(a_id);
 
@@ -336,7 +342,7 @@ router.get('/view-result/:id', async (req, res) => {
 
     selectAssignmentQuestionList = await sql_query.selectAssignmentQuestionList(a_id);
 
-    for (var assignment_value of selectAssignmentInfo) {
+    for (let assignment_value of selectAssignmentInfo) {
       assignment_value.start_date = moment(assignment_value.start_date).format('YYYY-MM-DD');
       assignment_value.end_date = moment(assignment_value.end_date).format('YYYY-MM-DD');
     }
@@ -354,7 +360,7 @@ router.get('/view-result/:id', async (req, res) => {
   }
 
   // initialize
-  selectAssignmentInfo, selectAssignmentSolveList, selectAssignmentQuestionList;
+  a_id, selectAssignmentInfo, selectAssignmentSolveList, selectAssignmentQuestionList;
 });
 
 /* teacher view "결과보기" detail view > chart */
@@ -377,7 +383,7 @@ router.get('/make-question', (req, res) => {
 // /teachers/make-question
 router.post('/make-question', async (req, res) => {
   try {
-    var new_question = {
+    new_question = {
       question_name: req.body.question_name,
       description: req.body.description,
       image: req.body.image.split('.'),
@@ -393,15 +399,18 @@ router.post('/make-question', async (req, res) => {
       new_question.answer &&
       new_question.mark_text
     ) {
-      var selectLatestMakeQuestionID = await sql_query.selectLatestMakeQuestionID();
+      // 최근 make_question 조회
+      selectLatestMakeQuestionID = await sql_query.selectLatestMakeQuestionID();
 
-      var make_question_id = selectLatestMakeQuestionID[0].make_question_id + 1;
+      make_question_id = selectLatestMakeQuestionID[0].make_question_id + 1;
       t_id = req.session.teacher_id;
+      // 이미지 포멧 지정 ex) make_question_1.jpg
       new_question.image = `makequestion/image/make_question_${make_question_id}.${new_question.image[1]}`;
-      var made_date = moment().format('YYYY-MM-DD');
+      made_date = moment().format('YYYY-MM-DD');
 
       await sql_query.insertNewMakeQuestion(t_id, new_question, made_date);
-      for (var mark_text of new_question.mark_text) {
+      // make_question에 해당하는 여러개의 mark 삽입
+      for (let mark_text of new_question.mark_text) {
         await sql_query.insertNewMark(make_question_id, mark_text);
       }
       res.send(
@@ -421,6 +430,9 @@ router.post('/make-question', async (req, res) => {
   } catch (err) {
     res.status(400);
   }
+
+  // initialize
+  new_question, selectLatestMakeQuestionID, make_question_id, made_date;
 });
 
 /* teacher view "Bigram tree" */
@@ -588,9 +600,10 @@ router.get('/notice', async (req, res) => {
   try {
     session = req.session;
 
-    var selectTeacherNoticeList = await sql_query.selectTeacherNoticeList();
+    selectTeacherNoticeList = await sql_query.selectTeacherNoticeList();
 
-    for (var notice_value of selectTeacherNoticeList) {
+    // 날짜 형식 변경
+    for (let notice_value of selectTeacherNoticeList) {
       notice_value.made_date = moment(notice_value.made_date).format('YYYY년 MM월 DD일');
     }
 
@@ -602,6 +615,9 @@ router.get('/notice', async (req, res) => {
   } catch (err) {
     res.status(400);
   }
+
+  // initialize
+  selectTeacherNoticeList;
 });
 
 /* teacher view "공지사항" detail view */
@@ -609,11 +625,11 @@ router.get('/notice', async (req, res) => {
 router.get('/notice/:id', async (req, res) => {
   try {
     session = req.session;
-    var notice_id = req.params.id;
+    notice_id = req.params.id;
 
-    var selectTeacherNoticeDetail = await sql_query.selectTeacherNoticeDetail(notice_id);
+    selectTeacherNoticeDetail = await sql_query.selectTeacherNoticeDetail(notice_id);
 
-    var notice = selectTeacherNoticeDetail[0];
+    notice = selectTeacherNoticeDetail[0];
     notice.made_date = moment(notice.made_date).format('YYYY년 MM월 DD일');
 
     res.render('teachers/notice_detail', {
@@ -624,6 +640,9 @@ router.get('/notice/:id', async (req, res) => {
   } catch (err) {
     res.status(400);
   }
+
+  // initialize
+  notice_id, selectTeacherNoticeDetail, notice;
 });
 
 /* teacher view "활용가이드" */
@@ -766,3 +785,4 @@ router.post('/signup', async (req, res) => {
 });
 
 module.exports = router;
+
